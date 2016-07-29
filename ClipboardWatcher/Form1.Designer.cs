@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.cbStretch = new System.Windows.Forms.CheckBox();
             this.pnlImage = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -60,7 +61,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.cbStretch = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.pnlImage.SuspendLayout();
@@ -123,6 +123,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1284, 655);
             this.panel2.TabIndex = 6;
+            // 
+            // cbStretch
+            // 
+            this.cbStretch.AutoSize = true;
+            this.cbStretch.Location = new System.Drawing.Point(8, 632);
+            this.cbStretch.Name = "cbStretch";
+            this.cbStretch.Size = new System.Drawing.Size(91, 17);
+            this.cbStretch.TabIndex = 22;
+            this.cbStretch.Text = "Stretch image";
+            this.cbStretch.UseVisualStyleBackColor = true;
+            this.cbStretch.CheckedChanged += new System.EventHandler(this.cbStretch_CheckedChanged);
             // 
             // pnlImage
             // 
@@ -354,18 +365,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 13);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Version 2.0";
-            // 
-            // cbStretch
-            // 
-            this.cbStretch.AutoSize = true;
-            this.cbStretch.Location = new System.Drawing.Point(8, 632);
-            this.cbStretch.Name = "cbStretch";
-            this.cbStretch.Size = new System.Drawing.Size(91, 17);
-            this.cbStretch.TabIndex = 22;
-            this.cbStretch.Text = "Stretch image";
-            this.cbStretch.UseVisualStyleBackColor = true;
-            this.cbStretch.CheckedChanged += new System.EventHandler(this.cbStretch_CheckedChanged);
+            this.label3.Text = "Version 2.1";
             // 
             // Form1
             // 

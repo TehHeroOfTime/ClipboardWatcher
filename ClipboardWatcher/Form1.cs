@@ -87,8 +87,12 @@ namespace ClipboardWatcher
             if (e.Control && e.KeyCode == Keys.C)
             {
                 allowCopy = false;
-                CopySelectedValuesToClipboard();
-                
+                CopySelectedValuesToClipboard();                
+            }
+            if(e.KeyCode == Keys.Delete)
+            {
+                Variables.clipboardTextList.RemoveAt(listView1.SelectedItems[0].Index);
+                listView1.Items.RemoveAt(listView1.SelectedItems[0].Index);                    
             }
         }
 
