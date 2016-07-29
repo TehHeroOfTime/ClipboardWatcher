@@ -169,7 +169,7 @@ namespace ClipboardWatcher
 
                 using (FileStream fs = new FileStream(Variables.iniFile, FileMode.Append, FileAccess.Write))
                 using (StreamWriter sw = new StreamWriter(fs))
-                {
+                {                    
                     if (Variables.saveText)
                         sw.WriteLine("Save Text = true");
                     else
@@ -190,6 +190,11 @@ namespace ClipboardWatcher
                         sw.WriteLine("Save path for images = [" + Variables.imagePath + "]");
                     else
                         sw.WriteLine("Save path for images = ");
+
+                    if (Variables.stretchImage)
+                        sw.WriteLine("Stretch image = true");
+                    else
+                        sw.WriteLine("Stretch image = false");
                 }
             }
             catch(IOException)
@@ -220,6 +225,12 @@ namespace ClipboardWatcher
                     Variables.saveImages = true;
                 else
                     Variables.saveImages = false;
+
+
+                if (Variables.iniFileLines.Contains("Stretch image = true"))
+                    Variables.stretchImage = true;
+                else
+                    Variables.stretchImage = false;
 
                 //[2] = text
                 //[3] = images

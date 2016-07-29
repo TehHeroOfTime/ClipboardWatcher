@@ -93,16 +93,6 @@ namespace ClipboardWatcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap link2 {
-            get {
-                object obj = ResourceManager.GetObject("link2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap save {
             get {
                 object obj = ResourceManager.GetObject("save", resourceCulture);
@@ -126,16 +116,6 @@ namespace ClipboardWatcher.Properties {
         internal static System.Drawing.Bitmap txtt {
             get {
                 object obj = ResourceManager.GetObject("txtt", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap VideoImage {
-            get {
-                object obj = ResourceManager.GetObject("VideoImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

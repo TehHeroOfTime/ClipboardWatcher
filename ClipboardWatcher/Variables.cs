@@ -26,6 +26,8 @@ namespace ClipboardWatcher
         public static string defaultTextFolder = UserProfile + @"\Documents\ClipboardWatcher Data";
         public static string defaultImagesFolder = UserProfile + @"\Documents\ClipboardWatcher Data";
 
+        public static bool stretchImage;
+
         public static string textPath;
         public static string imagePath;
         
@@ -39,6 +41,8 @@ namespace ClipboardWatcher
         public static int restartSeconds;
 
         private static string _type;
+
+        
 
         public static string fileSavePath
         {

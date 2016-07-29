@@ -49,6 +49,11 @@ namespace ClipboardWatcher
 
             bLayerFile.WriteSettings();            
             Variables.type = "Text";
+
+            if (Variables.stretchImage)
+                cbStretch.Checked = true;
+            else
+                cbStretch.Checked = false;
                         
 
             //scrollbars on picturebox
@@ -555,6 +560,12 @@ namespace ClipboardWatcher
 
         private void cbStretch_CheckedChanged(object sender, EventArgs e)
         {
+            if (cbStretch.Checked)
+                Variables.stretchImage = true;
+            else
+                Variables.stretchImage = false;
+
+
             pictureBox1.BackgroundImage = null;
             pictureBox1.Size = new Size(994, 614);
 
@@ -565,6 +576,10 @@ namespace ClipboardWatcher
                     lvImages.Items[lvImages.SelectedIndices[i]].Selected = false;
                 }
             }
+
+            bLayerFile.WriteSettings();
+
+            
         }
 
 
