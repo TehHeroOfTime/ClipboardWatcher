@@ -94,6 +94,10 @@ namespace ClipboardWatcher
                 Variables.clipboardTextList.RemoveAt(listView1.SelectedItems[0].Index);
                 listView1.Items.RemoveAt(listView1.SelectedItems[0].Index);                    
             }
+
+            lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
+            lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
+            lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
         }
 
 
@@ -195,17 +199,20 @@ namespace ClipboardWatcher
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Variables.type == "Text")
+            if (MessageBox.Show("This option will delete the entire list. Are you sure?","Delete",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                Variables.clipboardTextList.Clear();
-                listView1.Items.Clear();
-            }
-            if (Variables.type == "Images")
-            {
-                Variables.clipboardImageList.Clear();
-                Variables.clipboardImageDate.Clear();
-                lvImages.Items.Clear();
-                pictureBox1.BackgroundImage = null;
+                if (Variables.type == "Text")
+                {
+                    Variables.clipboardTextList.Clear();
+                    listView1.Items.Clear();
+                }
+                if (Variables.type == "Images")
+                {
+                    Variables.clipboardImageList.Clear();
+                    Variables.clipboardImageDate.Clear();
+                    lvImages.Items.Clear();
+                    pictureBox1.BackgroundImage = null;
+                }
             }
 
 
@@ -587,6 +594,10 @@ namespace ClipboardWatcher
             {
                 Variables.clipboardImageList.RemoveAt(lvImages.SelectedItems[0].Index);
                 lvImages.Items.RemoveAt(lvImages.SelectedItems[0].Index);
+
+                lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
+                lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
+                lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
             }
         }
 
