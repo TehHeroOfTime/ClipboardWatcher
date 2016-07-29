@@ -286,12 +286,7 @@ namespace ClipboardWatcher
 
 
             //text
-            
-        }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           
         }
 
         private void button3_Click_1(object sender, EventArgs e)
@@ -584,6 +579,15 @@ namespace ClipboardWatcher
             bLayerFile.WriteSettings();
 
             
+        }
+
+        private void lvImages_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                Variables.clipboardImageList.RemoveAt(lvImages.SelectedItems[0].Index);
+                lvImages.Items.RemoveAt(lvImages.SelectedItems[0].Index);
+            }
         }
 
 
