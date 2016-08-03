@@ -868,7 +868,6 @@ namespace ClipboardWatcher
                 Variables.uniqueFiles = true;            
             else
                 Variables.uniqueFiles = false;
-
             bLayerFile.WriteSettings();
         }
 
