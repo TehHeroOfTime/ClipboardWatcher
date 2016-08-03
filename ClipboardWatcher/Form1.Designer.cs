@@ -71,6 +71,10 @@
             this.button6 = new System.Windows.Forms.Button();
             this.tbPathFileNames = new System.Windows.Forms.TextBox();
             this.cbFiles = new System.Windows.Forms.CheckBox();
+            this.lblDelRecord = new System.Windows.Forms.Label();
+            this.cbUnique = new System.Windows.Forms.CheckBox();
+            this.toolTipUnique = new System.Windows.Forms.ToolTip(this.components);
+            this.lblFilecopies = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.pnlImage.SuspendLayout();
@@ -91,7 +95,9 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyUp);
+            this.listView1.Leave += new System.EventHandler(this.listView1_Leave);
             // 
             // chText
             // 
@@ -143,6 +149,7 @@
             this.cbStretch.Size = new System.Drawing.Size(91, 17);
             this.cbStretch.TabIndex = 22;
             this.cbStretch.Text = "Stretch image";
+            this.toolTipUnique.SetToolTip(this.cbStretch, "Stretches the image to fit the screen");
             this.cbStretch.UseVisualStyleBackColor = true;
             this.cbStretch.CheckedChanged += new System.EventHandler(this.cbStretch_CheckedChanged);
             // 
@@ -188,6 +195,7 @@
             this.lvImages.View = System.Windows.Forms.View.Details;
             this.lvImages.SelectedIndexChanged += new System.EventHandler(this.lvImages_SelectedIndexChanged);
             this.lvImages.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lvImages_KeyUp);
+            this.lvImages.Leave += new System.EventHandler(this.lvImages_Leave);
             // 
             // columnHeader1
             // 
@@ -197,7 +205,7 @@
             // lblTextcopies
             // 
             this.lblTextcopies.AutoSize = true;
-            this.lblTextcopies.Location = new System.Drawing.Point(187, 674);
+            this.lblTextcopies.Location = new System.Drawing.Point(186, 695);
             this.lblTextcopies.Name = "lblTextcopies";
             this.lblTextcopies.Size = new System.Drawing.Size(91, 13);
             this.lblTextcopies.TabIndex = 10;
@@ -206,7 +214,7 @@
             // lblImageCopies
             // 
             this.lblImageCopies.AutoSize = true;
-            this.lblImageCopies.Location = new System.Drawing.Point(187, 699);
+            this.lblImageCopies.Location = new System.Drawing.Point(186, 713);
             this.lblImageCopies.Name = "lblImageCopies";
             this.lblImageCopies.Size = new System.Drawing.Size(102, 13);
             this.lblImageCopies.TabIndex = 11;
@@ -215,7 +223,7 @@
             // lblOverallcopies
             // 
             this.lblOverallcopies.AutoSize = true;
-            this.lblOverallcopies.Location = new System.Drawing.Point(187, 724);
+            this.lblOverallcopies.Location = new System.Drawing.Point(186, 746);
             this.lblOverallcopies.Name = "lblOverallcopies";
             this.lblOverallcopies.Size = new System.Drawing.Size(102, 13);
             this.lblOverallcopies.TabIndex = 12;
@@ -301,7 +309,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Version 2.4.3";
+            this.label3.Text = "Version 2.4.4";
             // 
             // button5
             // 
@@ -316,6 +324,7 @@
             // 
             // pnlfiles
             // 
+            this.pnlfiles.Controls.Add(this.cbUnique);
             this.pnlfiles.Controls.Add(this.lvFiles);
             this.pnlfiles.Controls.Add(this.label4);
             this.pnlfiles.Location = new System.Drawing.Point(2603, 12);
@@ -335,6 +344,9 @@
             this.lvFiles.TabIndex = 0;
             this.lvFiles.UseCompatibleStateImageBehavior = false;
             this.lvFiles.View = System.Windows.Forms.View.Details;
+            this.lvFiles.SelectedIndexChanged += new System.EventHandler(this.lvFiles_SelectedIndexChanged);
+            this.lvFiles.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lvFiles_KeyUp);
+            this.lvFiles.Leave += new System.EventHandler(this.lvFiles_Leave);
             // 
             // columnHeader2
             // 
@@ -376,6 +388,7 @@
             this.btnFiles.Name = "btnFiles";
             this.btnFiles.Size = new System.Drawing.Size(81, 64);
             this.btnFiles.TabIndex = 25;
+            this.toolTipUnique.SetToolTip(this.btnFiles, "Files");
             this.btnFiles.UseVisualStyleBackColor = true;
             this.btnFiles.Click += new System.EventHandler(this.btnFiles_Click);
             // 
@@ -383,10 +396,11 @@
             // 
             this.button1.BackgroundImage = global::ClipboardWatcher.Properties.Resources.save;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(12, 673);
+            this.button1.Location = new System.Drawing.Point(12, 695);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(81, 64);
             this.button1.TabIndex = 2;
+            this.toolTipUnique.SetToolTip(this.button1, "Saves the list of text,file names or images");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -398,6 +412,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(33, 20);
             this.button4.TabIndex = 19;
+            this.toolTipUnique.SetToolTip(this.button4, "Set a path");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -409,6 +424,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(33, 20);
             this.button3.TabIndex = 18;
+            this.toolTipUnique.SetToolTip(this.button3, "Set a path");
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_3);
             // 
@@ -421,6 +437,7 @@
             this.btnText.Name = "btnText";
             this.btnText.Size = new System.Drawing.Size(81, 64);
             this.btnText.TabIndex = 9;
+            this.toolTipUnique.SetToolTip(this.btnText, "Text");
             this.btnText.UseVisualStyleBackColor = true;
             this.btnText.Click += new System.EventHandler(this.btnText_Click);
             // 
@@ -433,6 +450,7 @@
             this.btnImages.Name = "btnImages";
             this.btnImages.Size = new System.Drawing.Size(81, 64);
             this.btnImages.TabIndex = 4;
+            this.toolTipUnique.SetToolTip(this.btnImages, "Images");
             this.btnImages.UseVisualStyleBackColor = true;
             this.btnImages.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -440,10 +458,11 @@
             // 
             this.button2.BackgroundImage = global::ClipboardWatcher.Properties.Resources.bin;
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.Location = new System.Drawing.Point(99, 673);
+            this.button2.Location = new System.Drawing.Point(99, 695);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(81, 64);
             this.button2.TabIndex = 3;
+            this.toolTipUnique.SetToolTip(this.button2, "Delete the entire list");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -455,6 +474,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(33, 20);
             this.button6.TabIndex = 28;
+            this.toolTipUnique.SetToolTip(this.button6, "Set a path");
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -477,11 +497,43 @@
             this.cbFiles.UseVisualStyleBackColor = true;
             this.cbFiles.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // lblDelRecord
+            // 
+            this.lblDelRecord.AutoSize = true;
+            this.lblDelRecord.Location = new System.Drawing.Point(12, 670);
+            this.lblDelRecord.Name = "lblDelRecord";
+            this.lblDelRecord.Size = new System.Drawing.Size(146, 13);
+            this.lblDelRecord.TabIndex = 29;
+            this.lblDelRecord.Text = "Press DEL to delete a record!";
+            // 
+            // cbUnique
+            // 
+            this.cbUnique.AutoSize = true;
+            this.cbUnique.Location = new System.Drawing.Point(1164, 15);
+            this.cbUnique.Name = "cbUnique";
+            this.cbUnique.Size = new System.Drawing.Size(115, 17);
+            this.cbUnique.TabIndex = 2;
+            this.cbUnique.Text = "Enable unique files";
+            this.toolTipUnique.SetToolTip(this.cbUnique, "When selecting this there will be no duplicates in the list");
+            this.cbUnique.UseVisualStyleBackColor = true;
+            this.cbUnique.CheckedChanged += new System.EventHandler(this.cbUnique_CheckedChanged);
+            // 
+            // lblFilecopies
+            // 
+            this.lblFilecopies.AutoSize = true;
+            this.lblFilecopies.Location = new System.Drawing.Point(186, 730);
+            this.lblFilecopies.Name = "lblFilecopies";
+            this.lblFilecopies.Size = new System.Drawing.Size(87, 13);
+            this.lblFilecopies.TabIndex = 30;
+            this.lblFilecopies.Text = "Total file copies: ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(4939, 766);
+            this.Controls.Add(this.lblFilecopies);
+            this.Controls.Add(this.lblDelRecord);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.tbPathFileNames);
             this.Controls.Add(this.cbFiles);
@@ -569,6 +621,10 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox tbPathFileNames;
         private System.Windows.Forms.CheckBox cbFiles;
+        private System.Windows.Forms.Label lblDelRecord;
+        private System.Windows.Forms.CheckBox cbUnique;
+        private System.Windows.Forms.ToolTip toolTipUnique;
+        private System.Windows.Forms.Label lblFilecopies;
     }
 }
 

@@ -36,6 +36,9 @@ namespace ClipboardWatcher
        
         private void Form1_Load(object sender, EventArgs e)
         {
+            lblDelRecord.Visible = false;
+
+
             //Remove hover over backcolors on the buttons
             btnFiles.BackColorChanged += (s, g) =>
             {
@@ -118,15 +121,19 @@ namespace ClipboardWatcher
                 allowCopy = false;
                 CopySelectedValuesToClipboard();                
             }
-            if(e.KeyCode == Keys.Delete)
+            if(e.KeyCode == Keys.Delete && listView1.SelectedItems.Count > 0)
             {
                 Variables.clipboardTextList.RemoveAt(listView1.SelectedItems[0].Index);
                 listView1.Items.RemoveAt(listView1.SelectedItems[0].Index);                    
             }
 
+            
+
             lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
             lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
-            lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
+            lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
+            lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
+            
         }
 
 
@@ -201,27 +208,49 @@ namespace ClipboardWatcher
                     else if (iData.GetDataPresent(DataFormats.FileDrop))
                     {
                         string[] copiedFile = (string[])iData.GetData(DataFormats.FileDrop);
-
                         foreach (string t in copiedFile)
-                        {
-                            Variables.copiedFileNames.Add(t);
+                        {                            
+                            if (Variables.uniqueFiles)
+                            {
+                                int length = Variables.copiedFileNames.Count;
+                                if (length > 0 && Variables.copiedFileNames.Contains(t))
+                                {
 
-                            ListViewItem itm = new ListViewItem();
-                            itm.Text = t;
-                            itm.SubItems.Add(completedate);
-                            lvFiles.Items.Add(itm);
-                            Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
+                                }
+                                else
+                                {
+                                    Variables.copiedFileNames.Add(t);
+
+                                    ListViewItem itm = new ListViewItem();
+                                    itm.Text = t;
+                                    itm.SubItems.Add(completedate);
+                                    lvFiles.Items.Add(itm);
+                                    Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
+                                }
+                            }
+                            else//not unique
+                            {
+                                Variables.copiedFileNames.Add(t);
+
+                                ListViewItem itm = new ListViewItem();
+                                itm.Text = t;
+                                itm.SubItems.Add(completedate);
+                                lvFiles.Items.Add(itm);
+                                Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
+                            }
+                            
                         }
 
                       
 
                     }
 
-                    
+
 
                     lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
                     lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
-                    lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
+                    lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
+                    lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
 
                     if (linkText >= 2)
                         linkText = 0;
@@ -262,13 +291,20 @@ namespace ClipboardWatcher
                     lvImages.Items.Clear();
                     pictureBox1.BackgroundImage = null;
                 }
+                if (Variables.type == "Filenames")
+                {
+                    Variables.clipboardFileNameList.Clear();
+                    Variables.copiedFileNames.Clear();
+                    lvFiles.Items.Clear();                    
+                }
             }
 
 
 
             lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
             lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
-            lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
+            lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
+            lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
             
         }
 
@@ -312,26 +348,25 @@ namespace ClipboardWatcher
         private void lvImages_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lvImages.SelectedItems.Count > 0)
-            {
-                //panel2.BackgroundImage = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])]; 
-                
-                //assign plaatjes
-                /*Plaatje plat;
-                foreach(Plaatje p in Variables.plaatjeList)
-                {
-                    plat = new Plaatje(Variables.clipboardImageList[1], 1, 1, 1);
-                }*/
+            {               
                 pictureBox1.BackgroundImage = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])];
-
 
                 if (!cbStretch.Checked)
                     pictureBox1.Size = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])].Size;
                 else
                 { //Stretching the image
                     pictureBox1.Size = new Size(994, 614);
+                   
                 }
             }
 
+            if (lvImages.SelectedItems.Count > 0)
+                lblDelRecord.Visible = true;
+            else
+            {
+                lblDelRecord.Visible = false;
+                pictureBox1.BackgroundImage = null;
+            }
         }
 
 
@@ -361,6 +396,11 @@ namespace ClipboardWatcher
                 cbStartup.Checked = true;
             else
                 cbStartup.Checked = false;
+
+            if (Variables.uniqueFiles)
+                cbUnique.Checked = true;
+            else
+                cbUnique.Checked = false;
 
             if (Variables.saveText)                            
                 cbText.Checked = true;            
@@ -494,10 +534,10 @@ namespace ClipboardWatcher
                 case 12: month = "December";
                     break;
             }
-            
-            Variables.finalTextPath = Variables.textPath + "\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
-            Variables.finalImagePath = Variables.imagePath + "\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
-            Variables.finalFileNamePath = Variables.fileNamePath + "\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
+            //edited on 03-08-2016 19:58
+            Variables.finalTextPath = Variables.textPath + "\\ClipboardWatcher output\\Text\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
+            Variables.finalImagePath = Variables.imagePath + "\\ClipboardWatcher output\\Images\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
+            Variables.finalFileNamePath = Variables.fileNamePath + "\\ClipboardWatcher output\\Filenames\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
 
             if (Variables.saveText)
                 if (!Directory.Exists(Variables.finalTextPath))
@@ -649,7 +689,7 @@ namespace ClipboardWatcher
 
         private void lvImages_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete && lvImages.SelectedItems.Count > 0)
             {//WHEN SELECTING AN IMAGE ARRAY EXCEPTION
 
                 Variables.clipboardImageDate.RemoveAt(lvImages.SelectedItems[0].Index);
@@ -660,7 +700,8 @@ namespace ClipboardWatcher
 
                 lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
                 lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
-                lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
+                lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
+                lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
             }
         }
 
@@ -788,6 +829,62 @@ namespace ClipboardWatcher
             }
 
             bLayerFile.WriteSettings();
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)            
+                lblDelRecord.Visible = true;            
+            else
+                lblDelRecord.Visible = false;
+        }
+
+        private void lvFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvFiles.SelectedItems.Count > 0)
+                lblDelRecord.Visible = true;
+            else
+                lblDelRecord.Visible = false;
+        }
+
+        private void lvFiles_Leave(object sender, EventArgs e)
+        {
+            lblDelRecord.Visible = false;
+        }
+
+        private void lvImages_Leave(object sender, EventArgs e)
+        {
+            lblDelRecord.Visible = false;
+        }
+
+        private void listView1_Leave(object sender, EventArgs e)
+        {
+            lblDelRecord.Visible = false;
+        }
+
+        private void cbUnique_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbUnique.Checked)            
+                Variables.uniqueFiles = true;            
+            else
+                Variables.uniqueFiles = false;
+
+            bLayerFile.WriteSettings();
+        }
+
+        private void lvFiles_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && lvFiles.SelectedItems.Count > 0)
+            {                
+                Variables.copiedFileNames.RemoveAt(lvFiles.SelectedItems[0].Index);
+                lvFiles.Items.RemoveAt(lvFiles.SelectedItems[0].Index);
+            }
+
+
+            lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
+            lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
+            lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
+            lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
         }
 
 

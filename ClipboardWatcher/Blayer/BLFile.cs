@@ -205,6 +205,11 @@ namespace ClipboardWatcher
                     else
                         sw.WriteLine("Save Filenames = false");
 
+                    if (Variables.uniqueFiles)
+                        sw.WriteLine("Unique files = true");
+                    else
+                        sw.WriteLine("Unique files = false");
+
                     if (Variables.textPath != "" && Variables.textPath != null)
                         sw.WriteLine("Save path for text = [" + Variables.textPath + "]");
                     else
@@ -260,20 +265,25 @@ namespace ClipboardWatcher
                 else
                     Variables.saveFileNames = false;
 
+                if (Variables.iniFileLines.Contains("Unique files = true"))
+                    Variables.uniqueFiles = true;
+                else
+                    Variables.uniqueFiles = false;
+
 
                 if (Variables.iniFileLines.Contains("Stretch image = true"))
                     Variables.stretchImage = true;
                 else
                     Variables.stretchImage = false;
 
-                //[3] = text
-                //[4] = images
-                //[5] = filenames
+                //[4] = text
+                //[5] = images
+                //[6] = filenames
                 if (Variables.iniFileLines.Count >= 3)
                 {
-                    if (Variables.iniFileLines[3].Contains("Save path for text = ["))
+                    if (Variables.iniFileLines[4].Contains("Save path for text = ["))
                     {
-                        string s = Variables.iniFileLines[3];
+                        string s = Variables.iniFileLines[4];
                         int start = s.IndexOf("[") + 1;
                         int end = s.IndexOf("]", start);
                         string result = s.Substring(start, end - start);
@@ -284,9 +294,9 @@ namespace ClipboardWatcher
                         Variables.textPath = Variables.defaultTextFolder; //default
 
 
-                    if (Variables.iniFileLines[4].Contains("Save path for images = ["))
+                    if (Variables.iniFileLines[5].Contains("Save path for images = ["))
                     {
-                        string s = Variables.iniFileLines[4];
+                        string s = Variables.iniFileLines[5];
                         int start = s.IndexOf("[") + 1;
                         int end = s.IndexOf("]", start);
                         string result = s.Substring(start, end - start);
@@ -296,9 +306,9 @@ namespace ClipboardWatcher
                     else
                         Variables.imagePath = Variables.defaultImagesFolder; //default
 
-                    if (Variables.iniFileLines[5].Contains("Save path for Filenames = ["))
+                    if (Variables.iniFileLines[6].Contains("Save path for Filenames = ["))
                     {
-                        string s = Variables.iniFileLines[5];
+                        string s = Variables.iniFileLines[6];
                         int start = s.IndexOf("[") + 1;
                         int end = s.IndexOf("]", start);
                         string result = s.Substring(start, end - start);

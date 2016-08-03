@@ -31,6 +31,7 @@ namespace ClipboardWatcher
         public static string defaultFileNamesFolder = UserProfile + @"\Documents\ClipboardWatcher Data";
 
         public static bool stretchImage;
+        public static bool uniqueFiles;
 
         public static string textPath;
         public static string imagePath;
