@@ -54,9 +54,9 @@ namespace ClipboardWatcher
 
             if(log.ShowDialog() == DialogResult.OK)
             {
-                foreach(string itm in Variables.clipboardTextList)
-                {                    
-                    System.IO.File.WriteAllLines(log.FileName + ".txt", Variables.clipboardTextList.ToArray());                    
+                foreach(string itm in Variables.clipboardFileNameList)
+                {
+                    System.IO.File.WriteAllLines(log.FileName + ".txt", Variables.clipboardFileNameList.ToArray());                    
                 }
             }
         }
@@ -79,6 +79,27 @@ namespace ClipboardWatcher
                     System.IO.File.WriteAllLines(path + "\\" + finalName, Variables.clipboardTextList.ToArray());                                   
                 }
                 
+            //}          
+        }
+        public void SaveFileNamesFile(ListView lv, string path)
+        {
+            //only selectable option will be .txt
+            int i = 1;
+            log.Filter = "Text Files | *.txt";
+            // foreach (string itm in Variables.clipboardTextList)
+            //{
+            if (!System.IO.File.Exists(path + "\\" + "Copied text" + ".txt"))
+                System.IO.File.WriteAllLines(path + "\\" + "Copied text" + ".txt", Variables.clipboardFileNameList.ToArray());
+            else
+            {
+                //there already exists a text file called copies text.txt , hmm.. gotta rename it then! 
+                string[] filez = Directory.GetFiles(path);//Get all the files in the text folder
+                int length = filez.Length;//amount of files in the text folder
+
+                string finalName = "Copied text(" + length + ").txt";
+                System.IO.File.WriteAllLines(path + "\\" + finalName, Variables.clipboardFileNameList.ToArray());
+            }
+
             //}          
         }
         public void SaveImageFile(ListView lv,PictureBox pb)
@@ -136,9 +157,7 @@ namespace ClipboardWatcher
                     Shortcut.Description = "Shortcut of ClipboardWatcher";
 
 
-                    Shortcut.Save();               
-
-                MessageBox.Show("Success! ClipboardWatcher will now open the next time you start windows!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Shortcut.Save();                               
             }
             catch (Exception ex)
             {
@@ -181,6 +200,11 @@ namespace ClipboardWatcher
                     else
                         sw.WriteLine("Save Images = false");
 
+                    if (Variables.saveFileNames)
+                        sw.WriteLine("Save Filenames = true");
+                    else
+                        sw.WriteLine("Save Filenames = false");
+
                     if (Variables.textPath != "" && Variables.textPath != null)
                         sw.WriteLine("Save path for text = [" + Variables.textPath + "]");
                     else
@@ -190,6 +214,11 @@ namespace ClipboardWatcher
                         sw.WriteLine("Save path for images = [" + Variables.imagePath + "]");
                     else
                         sw.WriteLine("Save path for images = ");
+
+                    if (Variables.imagePath != "" && Variables.imagePath != null)
+                        sw.WriteLine("Save path for Filenames = [" + Variables.fileNamePath + "]");
+                    else
+                        sw.WriteLine("Save path for Filenames = ");
 
                     if (Variables.stretchImage)
                         sw.WriteLine("Stretch image = true");
@@ -226,19 +255,25 @@ namespace ClipboardWatcher
                 else
                     Variables.saveImages = false;
 
+                if (Variables.iniFileLines.Contains("Save Filenames = true"))
+                    Variables.saveFileNames = true;
+                else
+                    Variables.saveFileNames = false;
+
 
                 if (Variables.iniFileLines.Contains("Stretch image = true"))
                     Variables.stretchImage = true;
                 else
                     Variables.stretchImage = false;
 
-                //[2] = text
-                //[3] = images
+                //[3] = text
+                //[4] = images
+                //[5] = filenames
                 if (Variables.iniFileLines.Count >= 3)
                 {
-                    if (Variables.iniFileLines[2].Contains("Save path for text = ["))
+                    if (Variables.iniFileLines[3].Contains("Save path for text = ["))
                     {
-                        string s = Variables.iniFileLines[2];
+                        string s = Variables.iniFileLines[3];
                         int start = s.IndexOf("[") + 1;
                         int end = s.IndexOf("]", start);
                         string result = s.Substring(start, end - start);
@@ -249,9 +284,9 @@ namespace ClipboardWatcher
                         Variables.textPath = Variables.defaultTextFolder; //default
 
 
-                    if (Variables.iniFileLines[3].Contains("Save path for images = ["))
+                    if (Variables.iniFileLines[4].Contains("Save path for images = ["))
                     {
-                        string s = Variables.iniFileLines[3];
+                        string s = Variables.iniFileLines[4];
                         int start = s.IndexOf("[") + 1;
                         int end = s.IndexOf("]", start);
                         string result = s.Substring(start, end - start);
@@ -260,11 +295,24 @@ namespace ClipboardWatcher
                     }
                     else
                         Variables.imagePath = Variables.defaultImagesFolder; //default
+
+                    if (Variables.iniFileLines[5].Contains("Save path for Filenames = ["))
+                    {
+                        string s = Variables.iniFileLines[5];
+                        int start = s.IndexOf("[") + 1;
+                        int end = s.IndexOf("]", start);
+                        string result = s.Substring(start, end - start);
+
+                        Variables.fileNamePath = result;
+                    }
+                    else
+                        Variables.fileNamePath = Variables.defaultFileNamesFolder; //default
                 }
                 else
                 {
                     Variables.textPath = Variables.defaultTextFolder; //default
                     Variables.imagePath = Variables.defaultImagesFolder; //default
+                    Variables.fileNamePath = Variables.defaultFileNamesFolder; //default
                 }
             }            
             catch(IOException)

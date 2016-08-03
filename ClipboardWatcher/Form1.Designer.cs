@@ -45,7 +45,6 @@
             this.lblTextcopies = new System.Windows.Forms.Label();
             this.lblImageCopies = new System.Windows.Forms.Label();
             this.lblOverallcopies = new System.Windows.Forms.Label();
-            this.btnCreateShortcut = new System.Windows.Forms.Button();
             this.ClipboardIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.cpwSettings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,18 +53,30 @@
             this.cbImages = new System.Windows.Forms.CheckBox();
             this.tbPathText = new System.Windows.Forms.TextBox();
             this.tbPathImages = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
+            this.pnlfiles = new System.Windows.Forms.Panel();
+            this.lvFiles = new System.Windows.Forms.ListView();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbStartup = new System.Windows.Forms.CheckBox();
+            this.btnFiles = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.btnText = new System.Windows.Forms.Button();
             this.btnImages = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
+            this.tbPathFileNames = new System.Windows.Forms.TextBox();
+            this.cbFiles = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.pnlImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cpwSettings.SuspendLayout();
+            this.pnlfiles.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -159,9 +170,9 @@
             this.label2.Font = new System.Drawing.Font("Sitka Text", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(3, 2);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 29);
+            this.label2.Size = new System.Drawing.Size(186, 29);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Images";
+            this.label2.Text = "Clipboard Images";
             // 
             // lvImages
             // 
@@ -209,16 +220,6 @@
             this.lblOverallcopies.Size = new System.Drawing.Size(102, 13);
             this.lblOverallcopies.TabIndex = 12;
             this.lblOverallcopies.Text = "Total overall copies:";
-            // 
-            // btnCreateShortcut
-            // 
-            this.btnCreateShortcut.Location = new System.Drawing.Point(972, 674);
-            this.btnCreateShortcut.Name = "btnCreateShortcut";
-            this.btnCreateShortcut.Size = new System.Drawing.Size(228, 63);
-            this.btnCreateShortcut.TabIndex = 13;
-            this.btnCreateShortcut.Text = "Start ClipboardWatcher automatically on windows startup!";
-            this.btnCreateShortcut.UseVisualStyleBackColor = true;
-            this.btnCreateShortcut.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // ClipboardIcon
             // 
@@ -281,7 +282,7 @@
             this.tbPathText.Enabled = false;
             this.tbPathText.Location = new System.Drawing.Point(583, 695);
             this.tbPathText.Name = "tbPathText";
-            this.tbPathText.Size = new System.Drawing.Size(307, 20);
+            this.tbPathText.Size = new System.Drawing.Size(384, 20);
             this.tbPathText.TabIndex = 16;
             this.tbPathText.Leave += new System.EventHandler(this.tbPathText_Leave);
             // 
@@ -290,14 +291,110 @@
             this.tbPathImages.Enabled = false;
             this.tbPathImages.Location = new System.Drawing.Point(583, 717);
             this.tbPathImages.Name = "tbPathImages";
-            this.tbPathImages.Size = new System.Drawing.Size(307, 20);
+            this.tbPathImages.Size = new System.Drawing.Size(384, 20);
             this.tbPathImages.TabIndex = 17;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1221, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Version 2.4.3";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(318, 674);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 22;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Visible = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // pnlfiles
+            // 
+            this.pnlfiles.Controls.Add(this.lvFiles);
+            this.pnlfiles.Controls.Add(this.label4);
+            this.pnlfiles.Location = new System.Drawing.Point(2603, 12);
+            this.pnlfiles.Name = "pnlfiles";
+            this.pnlfiles.Size = new System.Drawing.Size(1284, 655);
+            this.pnlfiles.TabIndex = 23;
+            // 
+            // lvFiles
+            // 
+            this.lvFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader2,
+            this.columnHeader3});
+            this.lvFiles.FullRowSelect = true;
+            this.lvFiles.Location = new System.Drawing.Point(3, 32);
+            this.lvFiles.Name = "lvFiles";
+            this.lvFiles.Size = new System.Drawing.Size(1272, 620);
+            this.lvFiles.TabIndex = 0;
+            this.lvFiles.UseCompatibleStateImageBehavior = false;
+            this.lvFiles.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Text";
+            this.columnHeader2.Width = 1000;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Date";
+            this.columnHeader3.Width = 260;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Sitka Text", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(3, 2);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(162, 29);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Clipboard Files";
+            // 
+            // cbStartup
+            // 
+            this.cbStartup.AutoSize = true;
+            this.cbStartup.Location = new System.Drawing.Point(399, 672);
+            this.cbStartup.Name = "cbStartup";
+            this.cbStartup.Size = new System.Drawing.Size(294, 17);
+            this.cbStartup.TabIndex = 24;
+            this.cbStartup.Text = "Start ClipboardWatcher automatically on windows startup";
+            this.cbStartup.UseVisualStyleBackColor = true;
+            this.cbStartup.CheckedChanged += new System.EventHandler(this.cbStartup_CheckedChanged);
+            // 
+            // btnFiles
+            // 
+            this.btnFiles.BackgroundImage = global::ClipboardWatcher.Properties.Resources.fie;
+            this.btnFiles.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnFiles.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
+            this.btnFiles.Location = new System.Drawing.Point(1032, 695);
+            this.btnFiles.Name = "btnFiles";
+            this.btnFiles.Size = new System.Drawing.Size(81, 64);
+            this.btnFiles.TabIndex = 25;
+            this.btnFiles.UseVisualStyleBackColor = true;
+            this.btnFiles.Click += new System.EventHandler(this.btnFiles_Click);
+            // 
+            // button1
+            // 
+            this.button1.BackgroundImage = global::ClipboardWatcher.Properties.Resources.save;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(12, 673);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(81, 64);
+            this.button1.TabIndex = 2;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button4
             // 
             this.button4.BackgroundImage = global::ClipboardWatcher.Properties.Resources.folder;
             this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button4.Location = new System.Drawing.Point(896, 716);
+            this.button4.Location = new System.Drawing.Point(973, 715);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(33, 20);
             this.button4.TabIndex = 19;
@@ -308,7 +405,7 @@
             // 
             this.button3.BackgroundImage = global::ClipboardWatcher.Properties.Resources.folder;
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button3.Location = new System.Drawing.Point(896, 695);
+            this.button3.Location = new System.Drawing.Point(973, 694);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(33, 20);
             this.button3.TabIndex = 18;
@@ -319,7 +416,8 @@
             // 
             this.btnText.BackgroundImage = global::ClipboardWatcher.Properties.Resources.txtt;
             this.btnText.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnText.Location = new System.Drawing.Point(1206, 673);
+            this.btnText.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
+            this.btnText.Location = new System.Drawing.Point(1119, 695);
             this.btnText.Name = "btnText";
             this.btnText.Size = new System.Drawing.Size(81, 64);
             this.btnText.TabIndex = 9;
@@ -330,7 +428,8 @@
             // 
             this.btnImages.BackgroundImage = global::ClipboardWatcher.Properties.Resources.images;
             this.btnImages.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnImages.Location = new System.Drawing.Point(1206, 673);
+            this.btnImages.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
+            this.btnImages.Location = new System.Drawing.Point(1206, 695);
             this.btnImages.Name = "btnImages";
             this.btnImages.Size = new System.Drawing.Size(81, 64);
             this.btnImages.TabIndex = 4;
@@ -348,31 +447,48 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button1
+            // button6
             // 
-            this.button1.BackgroundImage = global::ClipboardWatcher.Properties.Resources.save;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(12, 673);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(81, 64);
-            this.button1.TabIndex = 2;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button6.BackgroundImage = global::ClipboardWatcher.Properties.Resources.folder;
+            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button6.Location = new System.Drawing.Point(973, 738);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(33, 20);
+            this.button6.TabIndex = 28;
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // label3
+            // tbPathFileNames
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1231, 2);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 13);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Version 2.3";
+            this.tbPathFileNames.Enabled = false;
+            this.tbPathFileNames.Location = new System.Drawing.Point(583, 740);
+            this.tbPathFileNames.Name = "tbPathFileNames";
+            this.tbPathFileNames.Size = new System.Drawing.Size(384, 20);
+            this.tbPathFileNames.TabIndex = 27;
+            // 
+            // cbFiles
+            // 
+            this.cbFiles.AutoSize = true;
+            this.cbFiles.Location = new System.Drawing.Point(399, 742);
+            this.cbFiles.Name = "cbFiles";
+            this.cbFiles.Size = new System.Drawing.Size(180, 17);
+            this.cbFiles.TabIndex = 26;
+            this.cbFiles.Text = "Save all copied filenames on exit";
+            this.cbFiles.UseVisualStyleBackColor = true;
+            this.cbFiles.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2848, 749);
+            this.ClientSize = new System.Drawing.Size(4939, 766);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.tbPathFileNames);
+            this.Controls.Add(this.cbFiles);
+            this.Controls.Add(this.btnFiles);
+            this.Controls.Add(this.cbStartup);
+            this.Controls.Add(this.pnlfiles);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -380,7 +496,6 @@
             this.Controls.Add(this.tbPathText);
             this.Controls.Add(this.cbImages);
             this.Controls.Add(this.cbText);
-            this.Controls.Add(this.btnCreateShortcut);
             this.Controls.Add(this.lblOverallcopies);
             this.Controls.Add(this.lblImageCopies);
             this.Controls.Add(this.lblTextcopies);
@@ -404,6 +519,8 @@
             this.pnlImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.cpwSettings.ResumeLayout(false);
+            this.pnlfiles.ResumeLayout(false);
+            this.pnlfiles.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -429,7 +546,6 @@
         private System.Windows.Forms.Label lblImageCopies;
         private System.Windows.Forms.Label lblOverallcopies;
         private System.Windows.Forms.Panel pnlImage;
-        private System.Windows.Forms.Button btnCreateShortcut;
         private System.Windows.Forms.NotifyIcon ClipboardIcon;
         private System.Windows.Forms.Timer tmrHide;
         private System.Windows.Forms.CheckBox cbText;
@@ -442,6 +558,17 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox cbStretch;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Panel pnlfiles;
+        private System.Windows.Forms.ListView lvFiles;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox cbStartup;
+        private System.Windows.Forms.Button btnFiles;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox tbPathFileNames;
+        private System.Windows.Forms.CheckBox cbFiles;
     }
 }
 

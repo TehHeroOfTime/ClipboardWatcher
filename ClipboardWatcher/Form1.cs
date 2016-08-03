@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ClipboardWatcher.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -31,21 +33,36 @@ namespace ClipboardWatcher
             _clipboardViewerNext = SetClipboardViewer(this.Handle);      // Adds our form to the chain of c
         }
 
+       
         private void Form1_Load(object sender, EventArgs e)
-        {            
+        {
+            //Remove hover over backcolors on the buttons
+            btnFiles.BackColorChanged += (s, g) =>
+            {
+                button1.FlatAppearance.MouseOverBackColor = button1.BackColor;
+            };
+
+            btnText.BackColorChanged += (s, g) =>
+            {
+                button1.FlatAppearance.MouseOverBackColor = button1.BackColor;
+            };
+            btnImages.BackColorChanged += (s, g) =>
+            {
+                button1.FlatAppearance.MouseOverBackColor = button1.BackColor;
+            };
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-            btnText.Visible = false;
-            btnImages.Visible = true;
 
-            this.Size = new Size(1305, 788);
+            this.Size = new Size(1305, 805);
 
             bLayerFile.CreateSettingsFile();
             bLayerFile.ReadSettings();
-            tbPathText.Text = Variables.textPath;
-            tbPathImages.Text = Variables.imagePath;
+
+            tbPathText.Text = Variables.textPath + "\\ClipboardWatcher output\\Text";
+            tbPathImages.Text = Variables.imagePath + "\\ClipboardWatcher output\\Images";
+            tbPathFileNames.Text = Variables.fileNamePath + "\\ClipboardWatcher output\\Filenames";
 
             bLayerFile.WriteSettings();            
             Variables.type = "Text";
@@ -68,7 +85,19 @@ namespace ClipboardWatcher
             this.WindowState = FormWindowState.Minimized;
 
             tmrHide.Start();
-            this.Hide();       
+            this.Hide();    
+
+
+            foreach (Control c in this.Controls)
+            {//Make buttons borderless
+                if (c is Button)
+                {
+                    Button b = (Button)c;
+                    b.TabStop = false;
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.FlatAppearance.BorderSize = 0;                   
+                }
+            }            
         }
 
         private void CopySelectedValuesToClipboard()
@@ -154,8 +183,7 @@ namespace ClipboardWatcher
                         // do something with it
                     }
                     else if (iData.GetDataPresent(DataFormats.Bitmap))
-                    {
-                        
+                    {                        
                         Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image 
                         Plaatje plaatje = new Plaatje(image,DateTime.Now.Hour,DateTime.Now.Minute,DateTime.Now.Second);
                         Variables.plaatjeList.Add(plaatje);
@@ -169,6 +197,24 @@ namespace ClipboardWatcher
                         }
 
                         // do something with it
+                    }
+                    else if (iData.GetDataPresent(DataFormats.FileDrop))
+                    {
+                        string[] copiedFile = (string[])iData.GetData(DataFormats.FileDrop);
+
+                        foreach (string t in copiedFile)
+                        {
+                            Variables.copiedFileNames.Add(t);
+
+                            ListViewItem itm = new ListViewItem();
+                            itm.Text = t;
+                            itm.SubItems.Add(completedate);
+                            lvFiles.Items.Add(itm);
+                            Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
+                        }
+
+                      
+
                     }
 
                     
@@ -190,7 +236,10 @@ namespace ClipboardWatcher
         private void button1_Click(object sender, EventArgs e)
         {
             if(Variables.type == "Text")
-                bLayerFile.SaveTextFile(listView1);     
+                bLayerFile.SaveTextFile(listView1);
+
+            if (Variables.type == "Filenames")
+                bLayerFile.SaveTextFile(lvFiles);   
        
             if(Variables.type == "Images")            
                 bLayerFile.SaveImageFile(lvImages,pictureBox1);
@@ -225,12 +274,14 @@ namespace ClipboardWatcher
 
         private void button3_Click(object sender, EventArgs e)
         {
-            btnImages.Visible = false;
-            btnText.Visible = true;
+            btnImages.Enabled = false;
+            btnText.Enabled = true;
+            btnFiles.Enabled = true;
 
             //switcheroo the panels
             panel1.Location = new Point(1312,12);
             panel2.Location = new Point(12,12);
+            pnlfiles.Location = new Point(2603, 12);
 
             lvImages.Items.Clear();
             foreach (string t in Variables.clipboardImageDate)
@@ -245,11 +296,15 @@ namespace ClipboardWatcher
 
         private void btnText_Click(object sender, EventArgs e)
         {
-            btnText.Visible = false;
-            btnImages.Visible = true;
+            btnImages.Enabled = true;
+            btnText.Enabled = false;
+            btnFiles.Enabled = true;
 
             panel1.Location = new Point(12,12);
             panel2.Location = new Point(1312, 12);
+            pnlfiles.Location = new Point(2603, 12);
+            
+           
 
             Variables.type = "Text";
         }
@@ -297,31 +352,25 @@ namespace ClipboardWatcher
         }
 
         private void button3_Click_1(object sender, EventArgs e)
-        {
-            if (btnCreateShortcut.Text == "Stop ClipboardWatcher from starting up automatically")
-            {
-                bLayerFile.DeleteShortcut();
-                DisableControls();
-            }
-            else
-            {
-                bLayerFile.CreateShortcut();
-                DisableControls();
-            }
+        {            
         }
 
         public void DisableControls()
         {
             if (System.IO.File.Exists(Variables.StartupFolderPath + "ClipboardWatcher.lnk"))
-                btnCreateShortcut.Text = "Stop ClipboardWatcher from starting up automatically";
+                cbStartup.Checked = true;
             else
-                btnCreateShortcut.Text = "Start ClipboardWatcher automatically on windows startup!";
+                cbStartup.Checked = false;
 
             if (Variables.saveText)                            
-                cbText.Checked = true;
-            
+                cbText.Checked = true;            
             else                            
                 cbText.Checked = false;
+
+            if (Variables.saveFileNames)
+                cbFiles.Checked = true;
+            else
+                cbFiles.Checked = false;
             
 
             if (Variables.saveImages)            
@@ -408,6 +457,11 @@ namespace ClipboardWatcher
                 if(listView1.Items.Count > 0)
                     bLayerFile.SaveTextFile(listView1, Variables.finalTextPath);
             }
+            if (Variables.saveFileNames)
+            {
+                if (lvFiles.Items.Count > 0)
+                    bLayerFile.SaveFileNamesFile(lvFiles, Variables.finalFileNamePath);
+            }
         }
 
         public void createFolder()
@@ -441,8 +495,9 @@ namespace ClipboardWatcher
                     break;
             }
             
-            Variables.finalTextPath = Variables.textPath + "\\Text\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
-            Variables.finalImagePath = Variables.imagePath + "\\Images\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
+            Variables.finalTextPath = Variables.textPath + "\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
+            Variables.finalImagePath = Variables.imagePath + "\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
+            Variables.finalFileNamePath = Variables.fileNamePath + "\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
 
             if (Variables.saveText)
                 if (!Directory.Exists(Variables.finalTextPath))
@@ -451,6 +506,10 @@ namespace ClipboardWatcher
             if(Variables.saveImages)
                 if (!Directory.Exists(Variables.finalImagePath))
                     Directory.CreateDirectory(Variables.finalImagePath);
+
+            if (Variables.saveFileNames)
+                if (!Directory.Exists(Variables.finalFileNamePath))
+                    Directory.CreateDirectory(Variables.finalFileNamePath);
         }
 
         private void ClipboardIcon_DoubleClick(object sender, EventArgs e)
@@ -475,15 +534,13 @@ namespace ClipboardWatcher
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if (tbPathText.Text != "")
-                Variables.textPath = tbPathText.Text;
-            if (tbPathImages.Text != "")
-                Variables.imagePath = tbPathImages.Text;
+
+            bLayerFile.ReadSettings();
 
             if (this.WindowState == FormWindowState.Minimized)
             {                
                 ClipboardIcon.Visible = true;
-                ClipboardIcon.Text = "Watches your clipboard.";                 
+                ClipboardIcon.Text = "ClipboardWatcher";                 
                 this.Hide();
             }
 
@@ -540,16 +597,18 @@ namespace ClipboardWatcher
 
         private void button3_Click_3(object sender, EventArgs e)
         {
-            tbPathText.Text = bLayerFile.getUserSelectedPath();
-            Variables.textPath = tbPathText.Text;
+            string path = bLayerFile.getUserSelectedPath();
+            tbPathText.Text = path + "\\ClipboardWatcher output\\Text";
+            Variables.textPath = path;
 
             bLayerFile.WriteSettings();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            tbPathImages.Text = bLayerFile.getUserSelectedPath();
-            Variables.imagePath = tbPathImages.Text;
+            string path = bLayerFile.getUserSelectedPath();
+            tbPathImages.Text = path + "\\ClipboardWatcher output\\Images";
+            Variables.imagePath = path;
 
             bLayerFile.WriteSettings();
         }
@@ -591,14 +650,144 @@ namespace ClipboardWatcher
         private void lvImages_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
-            {
+            {//WHEN SELECTING AN IMAGE ARRAY EXCEPTION
+
+                Variables.clipboardImageDate.RemoveAt(lvImages.SelectedItems[0].Index);
                 Variables.clipboardImageList.RemoveAt(lvImages.SelectedItems[0].Index);
                 lvImages.Items.RemoveAt(lvImages.SelectedItems[0].Index);
+
+                pictureBox1.BackgroundImage = null;
 
                 lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
                 lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
                 lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count);
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (Control c in this.Controls)
+                {                    
+                    if(c is Label)
+                    {
+                        c.ForeColor = Color.White;
+                        c.Font = new Font(c.Font, FontStyle.Bold);
+                        c.BackColor = Color.Transparent;
+                    }
+                    //c.ForeColor = Color.White;
+
+                    if (c is Button)
+                    {
+                        Button b = (Button)c;
+                        b.TabStop = false;
+                        b.FlatStyle = FlatStyle.Flat;
+                        b.FlatAppearance.BorderSize = 0;
+                        c.Font = new Font(c.Font, FontStyle.Bold);
+                    }                                                         
+                }
+
+                
+
+
+                foreach (Control c in panel1.Controls)
+                {
+                    if (c is Label)
+                    {
+                        c.ForeColor = Color.White;
+                        c.Font = new Font(c.Font, FontStyle.Bold);
+                        c.BackColor = Color.Transparent;
+                    }
+                    if (c is ListView)
+                    {
+                        c.BackColor = Color.DimGray;
+                        c.ForeColor = Color.White;
+                        c.Font = new Font(c.Font, FontStyle.Bold);
+
+                    } 
+                }
+
+                foreach (Control c in panel2.Controls)
+                {
+                    if (c is Label)
+                    {
+                        c.ForeColor = Color.White;
+                        c.Font = new Font(c.Font, FontStyle.Bold);
+                        c.BackColor = Color.Transparent;
+                    }
+                    if (c is ListView)
+                    {
+                        c.BackColor = Color.DimGray;
+                        c.ForeColor = Color.White;
+                        c.Font = new Font(c.Font, FontStyle.Bold);
+                    } 
+                }
+
+                Image myImage = Resources.grahyblack;
+                this.BackgroundImage = myImage;
+                button1.BackColor = Color.DimGray;
+
+
+                label1.BackColor = Color.Red;
+            }
+            catch { }
+            
+        }
+
+        private void cbStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbStartup.Checked)
+            {
+                bLayerFile.DeleteShortcut();
+                DisableControls();
+            }
+            else
+            {
+                bLayerFile.CreateShortcut();
+                DisableControls();
+            }
+        }
+
+        private void btnFiles_Click(object sender, EventArgs e)
+        {
+            Variables.type = "Filenames";
+
+            btnImages.Enabled = true;
+            btnText.Enabled = true;
+            btnFiles.Enabled = false;
+
+
+
+            panel1.Location = new Point(1312, 12);
+            panel2.Location = new Point(2603, 12);
+            pnlfiles.Location = new Point(12, 12);
+          
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string path = bLayerFile.getUserSelectedPath();
+            tbPathFileNames.Text = path + "\\ClipboardWatcher output\\Filenames";
+            Variables.fileNamePath = path;
+
+            bLayerFile.WriteSettings();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbFiles.Checked)
+            {
+                button6.Enabled = true;
+                Variables.saveFileNames = true;
+            }
+            else
+            {
+                button6.Enabled = false;
+                Variables.saveFileNames = false;
+            }
+
+            bLayerFile.WriteSettings();
         }
 
 

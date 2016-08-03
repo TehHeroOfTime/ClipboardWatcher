@@ -121,12 +121,12 @@
     <None Include="Resources\txtt.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\link2.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="ClipWatcher %281%29.ico" />
     <Content Include="Interop.IWshRuntimeLibrary.dll" />
-    <None Include="Resources\VideoImage.png" />
+    <None Include="Resources\fie.png" />
+    <None Include="Resources\files.png" />
+    <None Include="Resources\grahyblack.jpg" />
+    <None Include="Resources\black.jpg" />
     <None Include="Resources\folder.png" />
   </ItemGroup>
   <ItemGroup>
