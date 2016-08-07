@@ -22,11 +22,11 @@ namespace ClipboardWatcher
         int linkText = 0;
         int restartSeconds;
         BLFile bLayerFile;
-        
+        Form2 f;
         public Form1()
         {
             Clipboard.Clear();
-
+            f = new Form2();
             InitializeComponent();
             bLayerFile = new BLFile();
             
@@ -210,7 +210,7 @@ namespace ClipboardWatcher
                         string[] copiedFile = (string[])iData.GetData(DataFormats.FileDrop);
                         foreach (string t in copiedFile)
                         {                            
-                            if (Variables.uniqueFiles)
+                            if (Variables.enableUniqueFiles)
                             {
                                 int length = Variables.copiedFileNames.Count;
                                 if (length > 0 && Variables.copiedFileNames.Contains(t))
@@ -397,7 +397,7 @@ namespace ClipboardWatcher
             else
                 cbStartup.Checked = false;
 
-            if (Variables.uniqueFiles)
+            if (Variables.enableUniqueFiles)
                 cbUnique.Checked = true;
             else
                 cbUnique.Checked = false;
@@ -449,52 +449,15 @@ namespace ClipboardWatcher
         
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            createFolder();            
+            this.Hide();             
             
-            //Save the files if the user selected to do so
-            if(Variables.saveImages)
+            
+            createFolder();
+            string t = Variables.finalImagePath;
+            //Save text/filenames. Images will be saved in another form with a progress bar
+            if (Variables.saveText)
             {
-                //there already exists a text file called copies text.txt , hmm.. gotta rename it then! 
-                string[] filez = Directory.GetFiles(Variables.finalImagePath);//Get all the files in the text folder
-                int length = (filez.Length) + 1;//amount of files in the text folder
-
-                List<int> seconds = new List<int>();
-                List<int> minutes = new List<int>();
-                List<int> hours = new List<int>();
-
-                foreach(Plaatje p in Variables.plaatjeList)
-                {
-                    //fill the 3 lists with the time the screenshot got taken
-                    //when a image is saved to the clipboard a new Plaatje will be made and added to the plaatjeList with the image, the second,the minute, and the hour
-                    //this foreach loops loops through those Plaatjes
-                    seconds.Add(p.second);
-                    minutes.Add(p.minute);
-                    hours.Add(p.hour);
-                }
-
-                int count = 0;
-                foreach(Image img in Variables.clipboardImageList)
-                {
-                    if (!System.IO.File.Exists(Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"))
-                    {
-                        img.Save((Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"));
-                        length++;
-                    }
-                    else
-                    {//This shouldn't happen, but oh well.                        
-                        length++;
-                        if (!System.IO.File.Exists(Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"))
-                            img.Save((Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"));
-                    }
-
-                    count++;
-                    
-                }
-                count = 0;
-            }
-            if(Variables.saveText)
-            {
-                if(listView1.Items.Count > 0)
+                if (listView1.Items.Count > 0)
                     bLayerFile.SaveTextFile(listView1, Variables.finalTextPath);
             }
             if (Variables.saveFileNames)
@@ -502,6 +465,9 @@ namespace ClipboardWatcher
                 if (lvFiles.Items.Count > 0)
                     bLayerFile.SaveFileNamesFile(lvFiles, Variables.finalFileNamePath);
             }
+
+            if(Variables.clipboardImageList.Count > 0 && Variables.saveImages)
+                f.Show();
         }
 
         public void createFolder()
@@ -533,21 +499,20 @@ namespace ClipboardWatcher
                     break;
                 case 12: month = "December";
                     break;
-            }
-            //edited on 03-08-2016 19:58
+            }            
             Variables.finalTextPath = Variables.textPath + "\\ClipboardWatcher output\\Text\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
             Variables.finalImagePath = Variables.imagePath + "\\ClipboardWatcher output\\Images\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
             Variables.finalFileNamePath = Variables.fileNamePath + "\\ClipboardWatcher output\\Filenames\\" + DateTime.Now.Year.ToString() + "\\" + month + "\\" + DateTime.Now.Day.ToString() + " " + month;
 
-            if (Variables.saveText)
+            if (Variables.saveText && listView1.Items.Count > 0)
                 if (!Directory.Exists(Variables.finalTextPath))
                     Directory.CreateDirectory(Variables.finalTextPath);
 
-            if(Variables.saveImages)
+            if(Variables.saveImages && lvImages.Items.Count > 0)
                 if (!Directory.Exists(Variables.finalImagePath))
                     Directory.CreateDirectory(Variables.finalImagePath);
 
-            if (Variables.saveFileNames)
+            if (Variables.saveFileNames && lvFiles.Items.Count > 0)
                 if (!Directory.Exists(Variables.finalFileNamePath))
                     Directory.CreateDirectory(Variables.finalFileNamePath);
         }
@@ -559,12 +524,7 @@ namespace ClipboardWatcher
             this.ShowInTaskbar = true;
             this.WindowState = FormWindowState.Normal;                 
             ClipboardIcon.BalloonTipText = "Watches your clipboard.";
-            this.BringToFront();
-
-           
-
-
-            
+            this.BringToFront();            
         }
 
         private void Form1_ResizeBegin(object sender, EventArgs e)
@@ -865,9 +825,9 @@ namespace ClipboardWatcher
         private void cbUnique_CheckedChanged(object sender, EventArgs e)
         {
             if(cbUnique.Checked)            
-                Variables.uniqueFiles = true;            
+                Variables.enableUniqueFiles = true;            
             else
-                Variables.uniqueFiles = false;
+                Variables.enableUniqueFiles = false;
             bLayerFile.WriteSettings();
         }
 
@@ -876,6 +836,7 @@ namespace ClipboardWatcher
             if (e.KeyCode == Keys.Delete && lvFiles.SelectedItems.Count > 0)
             {                
                 Variables.copiedFileNames.RemoveAt(lvFiles.SelectedItems[0].Index);
+                Variables.clipboardFileNameList.RemoveAt(lvFiles.SelectedItems[0].Index);
                 lvFiles.Items.RemoveAt(lvFiles.SelectedItems[0].Index);
             }
 

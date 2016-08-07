@@ -56,6 +56,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.pnlfiles = new System.Windows.Forms.Panel();
+            this.cbUnique = new System.Windows.Forms.CheckBox();
             this.lvFiles = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -72,7 +73,6 @@
             this.tbPathFileNames = new System.Windows.Forms.TextBox();
             this.cbFiles = new System.Windows.Forms.CheckBox();
             this.lblDelRecord = new System.Windows.Forms.Label();
-            this.cbUnique = new System.Windows.Forms.CheckBox();
             this.toolTipUnique = new System.Windows.Forms.ToolTip(this.components);
             this.lblFilecopies = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -307,9 +307,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(1221, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.Size = new System.Drawing.Size(60, 13);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Version 2.4.4";
+            this.label3.Text = "Version 2.5";
             // 
             // button5
             // 
@@ -331,6 +331,18 @@
             this.pnlfiles.Name = "pnlfiles";
             this.pnlfiles.Size = new System.Drawing.Size(1284, 655);
             this.pnlfiles.TabIndex = 23;
+            // 
+            // cbUnique
+            // 
+            this.cbUnique.AutoSize = true;
+            this.cbUnique.Location = new System.Drawing.Point(1164, 15);
+            this.cbUnique.Name = "cbUnique";
+            this.cbUnique.Size = new System.Drawing.Size(115, 17);
+            this.cbUnique.TabIndex = 2;
+            this.cbUnique.Text = "Enable unique files";
+            this.toolTipUnique.SetToolTip(this.cbUnique, "When selecting this there will be no duplicates in the list");
+            this.cbUnique.UseVisualStyleBackColor = true;
+            this.cbUnique.CheckedChanged += new System.EventHandler(this.cbUnique_CheckedChanged);
             // 
             // lvFiles
             // 
@@ -505,18 +517,6 @@
             this.lblDelRecord.Size = new System.Drawing.Size(146, 13);
             this.lblDelRecord.TabIndex = 29;
             this.lblDelRecord.Text = "Press DEL to delete a record!";
-            // 
-            // cbUnique
-            // 
-            this.cbUnique.AutoSize = true;
-            this.cbUnique.Location = new System.Drawing.Point(1164, 15);
-            this.cbUnique.Name = "cbUnique";
-            this.cbUnique.Size = new System.Drawing.Size(115, 17);
-            this.cbUnique.TabIndex = 2;
-            this.cbUnique.Text = "Enable unique files";
-            this.toolTipUnique.SetToolTip(this.cbUnique, "When selecting this there will be no duplicates in the list");
-            this.cbUnique.UseVisualStyleBackColor = true;
-            this.cbUnique.CheckedChanged += new System.EventHandler(this.cbUnique_CheckedChanged);
             // 
             // lblFilecopies
             // 

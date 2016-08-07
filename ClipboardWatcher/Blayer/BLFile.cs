@@ -205,7 +205,7 @@ namespace ClipboardWatcher
                     else
                         sw.WriteLine("Save Filenames = false");
 
-                    if (Variables.uniqueFiles)
+                    if (Variables.enableUniqueFiles)
                         sw.WriteLine("Unique files = true");
                     else
                         sw.WriteLine("Unique files = false");
@@ -266,9 +266,9 @@ namespace ClipboardWatcher
                     Variables.saveFileNames = false;
 
                 if (Variables.iniFileLines.Contains("Unique files = true"))
-                    Variables.uniqueFiles = true;
+                    Variables.enableUniqueFiles = true;
                 else
-                    Variables.uniqueFiles = false;
+                    Variables.enableUniqueFiles = false;
 
 
                 if (Variables.iniFileLines.Contains("Stretch image = true"))

@@ -15,6 +15,12 @@ namespace ClipboardWatcher
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        static void FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ((Form)sender).FormClosed -= FormClosed;
+            if (Application.OpenForms.Count == 0) Application.ExitThread();
+            else Application.OpenForms[0].FormClosed += FormClosed;
+        }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -28,7 +34,10 @@ namespace ClipboardWatcher
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new Form1());
+                    var main = new Form1();
+                    main.FormClosed += new FormClosedEventHandler(FormClosed);
+                    main.Show();
+                    Application.Run();
                 }
                 else
                 {

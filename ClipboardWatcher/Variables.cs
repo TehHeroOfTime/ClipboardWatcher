@@ -18,6 +18,8 @@ namespace ClipboardWatcher
         public static List<Plaatje> plaatjeList = new List<Plaatje>();
         public static List<string> clipboardImageDate = new List<string>();
 
+        public static List<long> imageSizeList = new List<long>();
+
         public static List<string> copiedFileNames = new List<string>();
 
         public static List<string> iniFileLines = new List<string>();
@@ -31,7 +33,7 @@ namespace ClipboardWatcher
         public static string defaultFileNamesFolder = UserProfile + @"\Documents\ClipboardWatcher Data";
 
         public static bool stretchImage;
-        public static bool uniqueFiles;
+        public static bool enableUniqueFiles;
 
         public static string textPath;
         public static string imagePath;
@@ -49,6 +51,9 @@ namespace ClipboardWatcher
         public static int restartSeconds;
 
         private static string _type;
+
+        public static long totalImagesSize;
+        public static long savedImagesSize;
 
         
 
