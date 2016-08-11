@@ -53,7 +53,7 @@
             this.cbImages = new System.Windows.Forms.CheckBox();
             this.tbPathText = new System.Windows.Forms.TextBox();
             this.tbPathImages = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.pnlfiles = new System.Windows.Forms.Panel();
             this.cbUnique = new System.Windows.Forms.CheckBox();
@@ -302,14 +302,14 @@
             this.tbPathImages.Size = new System.Drawing.Size(384, 20);
             this.tbPathImages.TabIndex = 17;
             // 
-            // label3
+            // lblVersion
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1221, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 13);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Version 2.5";
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(1221, 0);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(69, 13);
+            this.lblVersion.TabIndex = 21;
+            this.lblVersion.Text = "Version 2.6.0";
             // 
             // button5
             // 
@@ -531,7 +531,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(4939, 766);
+            this.ClientSize = new System.Drawing.Size(1289, 766);
             this.Controls.Add(this.lblFilecopies);
             this.Controls.Add(this.lblDelRecord);
             this.Controls.Add(this.button6);
@@ -541,7 +541,7 @@
             this.Controls.Add(this.cbStartup);
             this.Controls.Add(this.pnlfiles);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.tbPathImages);
@@ -563,6 +563,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeBegin += new System.EventHandler(this.Form1_ResizeBegin);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp_1);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -580,51 +581,51 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ColumnHeader chText;
-        private System.Windows.Forms.ColumnHeader chDate;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button btnImages;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListView lvImages;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.Button btnText;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblTextcopies;
-        private System.Windows.Forms.Label lblImageCopies;
-        private System.Windows.Forms.Label lblOverallcopies;
-        private System.Windows.Forms.Panel pnlImage;
-        private System.Windows.Forms.NotifyIcon ClipboardIcon;
-        private System.Windows.Forms.Timer tmrHide;
-        private System.Windows.Forms.CheckBox cbText;
-        private System.Windows.Forms.CheckBox cbImages;
-        private System.Windows.Forms.TextBox tbPathText;
-        private System.Windows.Forms.TextBox tbPathImages;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.ContextMenuStrip cpwSettings;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox cbStretch;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Panel pnlfiles;
-        private System.Windows.Forms.ListView lvFiles;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox cbStartup;
-        private System.Windows.Forms.Button btnFiles;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.TextBox tbPathFileNames;
-        private System.Windows.Forms.CheckBox cbFiles;
-        private System.Windows.Forms.Label lblDelRecord;
-        private System.Windows.Forms.CheckBox cbUnique;
-        private System.Windows.Forms.ToolTip toolTipUnique;
-        private System.Windows.Forms.Label lblFilecopies;
+        public System.Windows.Forms.ListView listView1;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.ColumnHeader chText;
+        public System.Windows.Forms.ColumnHeader chDate;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Button button2;
+        public System.Windows.Forms.Button btnImages;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Panel panel2;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.ListView lvImages;
+        public System.Windows.Forms.ColumnHeader columnHeader1;
+        public System.Windows.Forms.Button btnText;
+        public System.Windows.Forms.PictureBox pictureBox1;
+        public System.Windows.Forms.Label lblTextcopies;
+        public System.Windows.Forms.Label lblImageCopies;
+        public System.Windows.Forms.Label lblOverallcopies;
+        public System.Windows.Forms.Panel pnlImage;
+        public System.Windows.Forms.NotifyIcon ClipboardIcon;
+        public System.Windows.Forms.Timer tmrHide;
+        public System.Windows.Forms.CheckBox cbText;
+        public System.Windows.Forms.CheckBox cbImages;
+        public System.Windows.Forms.TextBox tbPathText;
+        public System.Windows.Forms.TextBox tbPathImages;
+        public System.Windows.Forms.Button button3;
+        public System.Windows.Forms.Button button4;
+        public System.Windows.Forms.ContextMenuStrip cpwSettings;
+        public System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        public System.Windows.Forms.Label lblVersion;
+        public System.Windows.Forms.CheckBox cbStretch;
+        public System.Windows.Forms.Button button5;
+        public System.Windows.Forms.Panel pnlfiles;
+        public System.Windows.Forms.ListView lvFiles;
+        public System.Windows.Forms.ColumnHeader columnHeader2;
+        public System.Windows.Forms.ColumnHeader columnHeader3;
+        public System.Windows.Forms.Label label4;
+        public System.Windows.Forms.CheckBox cbStartup;
+        public System.Windows.Forms.Button btnFiles;
+        public System.Windows.Forms.Button button6;
+        public System.Windows.Forms.TextBox tbPathFileNames;
+        public System.Windows.Forms.CheckBox cbFiles;
+        public System.Windows.Forms.Label lblDelRecord;
+        public System.Windows.Forms.CheckBox cbUnique;
+        public System.Windows.Forms.ToolTip toolTipUnique;
+        public System.Windows.Forms.Label lblFilecopies;
     }
 }
 

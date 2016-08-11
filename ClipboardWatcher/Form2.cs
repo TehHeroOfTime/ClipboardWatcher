@@ -22,6 +22,7 @@ namespace ClipboardWatcher
         int count = 1;
         double value = 0;
         int processedImages = 0;
+        PointF procentPoint = new PointF(10,28);
 
         double procent;
 
@@ -32,35 +33,30 @@ namespace ClipboardWatcher
 
         string[] filez;//Get all the files in the text folder
         int length;//amount of files in the text folder
-
-
+        
+        
         public Form2()
         {
             InitializeComponent();
-            bLayerFile = new BLFile();
+            bLayerFile = new BLFile();            
             
         }
 
-        private void progressBar1_MarginChanged(object sender, EventArgs e)
-        {
-            
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-           
-        }
 
         private void tmrCloseApp_Tick(object sender, EventArgs e)
         {
             if (progressBar1.Value >= 100 || imageCount >= Variables.clipboardImageList.Count)
-            {                                
+            {                
                 Application.Exit();
             }            
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+
             totalImageCount = Variables.clipboardImageList.Count;
             filez = Directory.GetFiles(Variables.finalImagePath);//Get all the files in the text folder
             length = (filez.Length) + 1;//amount of files in the text folder
@@ -75,7 +71,7 @@ namespace ClipboardWatcher
                 hours.Add(p.hour);
             }
 
-           
+            
 
             tmrCloseApp.Start();
             
@@ -110,8 +106,8 @@ namespace ClipboardWatcher
             {
                 //there already exists a text file called copies text.txt , hmm.. gotta rename it then! 
 
-                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved(" + CalculatePercentage(count) + "%) [" + Variables.totalImagesSize + "]";
-
+                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved [" + Variables.totalImagesSize + "]";
+                lblProcent.Text = CalculatePercentage(count) + "%"; 
                 count = 0;
             }
            
@@ -195,9 +191,13 @@ namespace ClipboardWatcher
                 if (count > hours.Count)
                     count = hours.Count -1;
 
-                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved(" + (int)Math.Ceiling(procent) +"%)";
+                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved";                                                
+                lblProcent.Text = (int)Math.Ceiling(procent) +"%";
                 value = value + CalculatePercentage(count);
                 progressBar1.Value = (int)Math.Ceiling(procent);
+
+
+                
                 
             }
             catch { }

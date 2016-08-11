@@ -1,0 +1,128 @@
+﻿[Clipboardwatcher resizing]
+
+Resolutions: 720 x 480 /// 1000 x 600 /// 1280 x 720 /// 1305, 805(original)  [4955; 805 debug]
+
+
+[original]----------------
+
+panel1.Size 1284; 655
+Listview1.Size = 1272; 620
+lvImages.Size = 264; 589
+picturebox 994; 614
+pnlImage (om de picturebox) 1000; 620
+pnlFile.Size = 1284; 655
+lvFiles.Size = 1272; 620
+
+[locations]
+btnSave 12; 695
+btnDelete 99; 695
+lblTextCopies 186; 695
+lblImageCopies 186; 713
+lblFilecopies 186; 730
+lblOverallcopies 186; 746
+
+cbStartup 399; 672
+cbText 399; 695
+cbImages 399; 719
+cbFiles 399; 742
+
+tbPathText 583; 695   	 btn3 973; 694
+tbPathImages 583; 717 	 btn4 973; 715
+tbPathFilenames 583; 740 btn6 973; 738
+
+btnFiles 1032; 695
+btnTex 1119; 695
+btnImages 1206; 695
+
+cbStretch 8; 632
+
+version label 1221; 0
+
+
+
+
+
+[1280 x 720]------------------
+panel1.Size 1240; 550
+Listview1.Size = 1234; 515
+pnlFiles.Size = 1240; 550
+
+[images]
+lvImages.Size = 264; 481
+picturebox 960,478
+pnlImage (om de picturebox) 967; 504
+
+[files]
+lvFiles.Size = 1234; 515
+
+
+[locations]
+btnSave 6; 605
+btnDelete 93; 605
+lblTextCopies 180; 605
+lblImageCopies 180; 623
+lblFilecopies 180; 640
+lblOverallcopies 180; 656
+
+cbStartup 364; 582
+cbText 364; 605
+cbImages 364; 629
+cbFiles 364; 652
+
+tbPathText 548; 605   	 btn3 938; 604
+tbPathImages 548; 627 	 btn4 938; 625
+tbPathFilenames 548; 650 btn6 938; 648
+
+btnFiles 997; 605
+btnTex 1084; 605
+btnImages 1171; 605
+
+cbUnique.location 1123; 15
+cbStretch 8; 519
+
+
+
+
+
+
+
+
+
+
+[1000 x 600]------------------ CHTEXT.WIDTH = 655
+panel1.Size 928; 457
+Listview1.Size = 920; 417
+pnlFiles.Size = 1240; 550
+
+[images]
+lvImages.Size = 264; 389
+picturebox 619; 414
+pnlImage (om de picturebox) 625; 425
+
+[files]
+lvFiles.Size = 1234; 515/////
+
+
+[locations]
+btnSave 12; 492
+btnDelete 99; 492
+lblTextCopies 186; 492
+lblImageCopies 186; 510
+lblFilecopies 186; 527
+lblOverallcopies 186; 543
+
+cbStartup 332; 471
+cbText 332; 493
+cbImages 332; 516
+cbFiles 332; 539
+
+tbPathText 516; 494   	 btn3 906; 493
+tbPathImages 516; 516 	 btn4 906; 514
+tbPathFilenames 516; 539 btn6 906; 537
+
+btnFiles 938; 44
+btnTex 938; 94
+btnImages 938; 143
+
+cbUnique.location 1123; 15///////
+cbStretch 8; 427

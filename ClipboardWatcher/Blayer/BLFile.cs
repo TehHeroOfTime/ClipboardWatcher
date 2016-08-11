@@ -125,23 +125,17 @@ namespace ClipboardWatcher
 
         public string getUserSelectedPath()
         {
-            if(folderLog.ShowDialog() == DialogResult.OK)
-            {
-                return folderLog.SelectedPath;
-            }
-            else
-            {
-                return "";
-            }
+            if(folderLog.ShowDialog() == DialogResult.OK)            
+                return folderLog.SelectedPath;            
+            else            
+                return "";            
             
         }
 
         public void DeleteShortcut()
         {
             if (System.IO.File.Exists(Variables.StartupFolderPath + "ClipboardWatcher.lnk"))
-                System.IO.File.Delete(Variables.StartupFolderPath + "ClipboardWatcher.lnk");
-            else            
-                MessageBox.Show("File does not exist! \nHave you changed the name of the shortcut?");            
+                System.IO.File.Delete(Variables.StartupFolderPath + "ClipboardWatcher.lnk");          
         }
         public void CreateShortcut()
         {
@@ -229,6 +223,11 @@ namespace ClipboardWatcher
                         sw.WriteLine("Stretch image = true");
                     else
                         sw.WriteLine("Stretch image = false");
+
+                    if(Variables.resolution != "")
+                        sw.WriteLine("Resolution = [" + Variables.resolution + "]");
+                    else
+                        sw.WriteLine("Resolution = [1305,805]"); //default
                 }
             }
             catch(IOException)
@@ -317,6 +316,19 @@ namespace ClipboardWatcher
                     }
                     else
                         Variables.fileNamePath = Variables.defaultFileNamesFolder; //default
+
+                    if (!Variables.iniFileLines.Contains("Resolution = ["))
+                        Variables.iniFileLines.Add("Resolution = [1305,805]");
+                    
+                    if (Variables.iniFileLines[8].Contains("Resolution = ["))
+                    {
+                        string s = Variables.iniFileLines[8];
+                        int start = s.IndexOf("[") + 1;
+                        int end = s.IndexOf("]", start);
+                        string result = s.Substring(start, end - start);
+
+                        Variables.resolution = result;
+                    }
                 }
                 else
                 {

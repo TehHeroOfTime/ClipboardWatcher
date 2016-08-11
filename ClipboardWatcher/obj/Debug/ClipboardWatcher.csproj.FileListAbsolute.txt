@@ -8,3 +8,4 @@ C:\Users\Hero\Documents\Visual Studio 2013\Projects\ClipboardWatcher\ClipboardWa
 C:\Users\Hero\Documents\Visual Studio 2013\Projects\ClipboardWatcher\ClipboardWatcher\obj\Debug\ClipboardWatcher.pdb
 C:\Users\Hero\Documents\Visual Studio 2013\Projects\ClipboardWatcher\ClipboardWatcher\bin\Debug\ClipboardWatcher.pdb
 C:\Users\Hero\Documents\Visual Studio 2013\Projects\ClipboardWatcher\ClipboardWatcher\obj\Debug\ClipboardWatcher.csprojResolveAssemblyReference.cache
+C:\Users\Hero\Documents\Visual Studio 2013\Projects\ClipboardWatcher\ClipboardWatcher\obj\Debug\ClipboardWatcher.Resolution.resources

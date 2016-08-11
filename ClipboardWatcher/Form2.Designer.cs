@@ -36,6 +36,7 @@
             this.tmrStartSaving = new System.Windows.Forms.Timer(this.components);
             this.tmrNextImage = new System.Windows.Forms.Timer(this.components);
             this.tmrStartCalculating = new System.Windows.Forms.Timer(this.components);
+            this.lblProcent = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblImages
@@ -49,11 +50,10 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(28, 54);
+            this.progressBar1.Location = new System.Drawing.Point(23, 53);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(209, 23);
             this.progressBar1.TabIndex = 1;
-            this.progressBar1.MarginChanged += new System.EventHandler(this.progressBar1_MarginChanged);
             // 
             // tmrCloseApp
             // 
@@ -73,12 +73,24 @@
             // 
             this.tmrStartCalculating.Tick += new System.EventHandler(this.tmrStartCalculating_Tick);
             // 
+            // lblProcent
+            // 
+            this.lblProcent.AutoSize = true;
+            this.lblProcent.BackColor = System.Drawing.Color.Transparent;
+            this.lblProcent.Location = new System.Drawing.Point(238, 57);
+            this.lblProcent.Name = "lblProcent";
+            this.lblProcent.Size = new System.Drawing.Size(21, 13);
+            this.lblProcent.TabIndex = 2;
+            this.lblProcent.Text = "0%";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(271, 113);
             this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.lblProcent);
             this.Controls.Add(this.lblImages);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
@@ -98,5 +110,6 @@
         private System.Windows.Forms.Timer tmrStartSaving;
         private System.Windows.Forms.Timer tmrNextImage;
         private System.Windows.Forms.Timer tmrStartCalculating;
+        private System.Windows.Forms.Label lblProcent;
     }
 }

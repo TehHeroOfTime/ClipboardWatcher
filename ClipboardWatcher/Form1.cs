@@ -19,25 +19,28 @@ namespace ClipboardWatcher
     public partial class Form1 : Form
     {
         bool allowCopy = true;
-        int linkText = 0;
-        int restartSeconds;
+        int linkText = 0;        
         BLFile bLayerFile;
         Form2 f;
+        Resolution frmResolution;
+        ResolutionManager manager;
         public Form1()
         {
             Clipboard.Clear();
-            f = new Form2();
+            f = new Form2();            
             InitializeComponent();
             bLayerFile = new BLFile();
-            
+            manager = new ResolutionManager(this);
             _clipboardViewerNext = SetClipboardViewer(this.Handle);      // Adds our form to the chain of c
         }
 
        
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.KeyPreview = true;
             lblDelRecord.Visible = false;
-
+            Variables.resolutionFormUp = false;
+            
 
             //Remove hover over backcolors on the buttons
             btnFiles.BackColorChanged += (s, g) =>
@@ -56,12 +59,25 @@ namespace ClipboardWatcher
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-
-
-            this.Size = new Size(1305, 805);
+            
+            
 
             bLayerFile.CreateSettingsFile();
             bLayerFile.ReadSettings();
+
+            if (Variables.resolution != "")
+            {
+                List<string> resolution = Variables.resolution.Split(',').ToList<string>();
+                this.Size = new Size(Convert.ToInt32(resolution[0]), Convert.ToInt32(resolution[1]));
+            }
+            else
+                Variables.resolution = "1305,805";
+
+            manager.ChangeResolution(Variables.resolution);
+
+            bLayerFile.WriteSettings();    
+            this.lblVersion.Location = new Point((this.Size.Width - (this.lblVersion.Size.Width + 20)), 0);
+
 
             tbPathText.Text = Variables.textPath + "\\ClipboardWatcher output\\Text";
             tbPathImages.Text = Variables.imagePath + "\\ClipboardWatcher output\\Images";
@@ -349,14 +365,22 @@ namespace ClipboardWatcher
         {
             if (lvImages.SelectedItems.Count > 0)
             {               
-                pictureBox1.BackgroundImage = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])];
+                pictureBox1.BackgroundImage = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])]; //put the image from the imagelist into the picturebox
 
                 if (!cbStretch.Checked)
-                    pictureBox1.Size = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])].Size;
+                    pictureBox1.Size = Variables.clipboardImageList[lvImages.Items.IndexOf(lvImages.SelectedItems[0])].Size; //Resize the picturebox to the size of the image
                 else
-                { //Stretching the image
-                    pictureBox1.Size = new Size(994, 614);
-                   
+                { //Stretching the image to the size of the current resolution
+                    switch(Variables.resolution)
+                    {
+                        case "1000,600": pictureBox1.Size = new Size(619, 414);   
+                            break;
+                        case "1280,720": pictureBox1.Size = new Size(960, 488);
+                            break;
+                        case "1305,805": pictureBox1.Size = new Size(994, 614);   
+                            break;
+                    }
+                                    
                 }
             }
 
@@ -366,6 +390,15 @@ namespace ClipboardWatcher
             {
                 lblDelRecord.Visible = false;
                 pictureBox1.BackgroundImage = null;
+                switch (Variables.resolution)
+                {
+                    case "1000,600": pictureBox1.Size = new Size(619, 414);
+                        break;
+                    case "1280,720": pictureBox1.Size = new Size(960, 488);
+                        break;
+                    case "1305,805": pictureBox1.Size = new Size(994, 614);
+                        break;
+                }
             }
         }
 
@@ -449,9 +482,6 @@ namespace ClipboardWatcher
         
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Hide();             
-            
-            
             createFolder();
             string t = Variables.finalImagePath;
             //Save text/filenames. Images will be saved in another form with a progress bar
@@ -466,8 +496,63 @@ namespace ClipboardWatcher
                     bLayerFile.SaveFileNamesFile(lvFiles, Variables.finalFileNamePath);
             }
 
-            if(Variables.clipboardImageList.Count > 0 && Variables.saveImages)
-                f.Show();
+
+
+
+
+
+            if (e.CloseReason != CloseReason.WindowsShutDown && e.CloseReason != CloseReason.TaskManagerClosing)
+            {
+                if (Variables.clipboardImageList.Count > 0 && Variables.saveImages)
+                {
+                    this.Hide();
+                    f.Show();
+                }
+            }
+            else
+            {
+                //Saving images without progressbar (Form2)
+                if (Variables.saveImages)
+                {
+                    //there already exists a text file called copies text.txt , hmm.. gotta rename it then! 
+                    string[] filez = Directory.GetFiles(Variables.finalImagePath);//Get all the files in the text folder
+                    int length = (filez.Length) + 1;//amount of files in the text folder
+
+                    List<int> seconds = new List<int>();
+                    List<int> minutes = new List<int>();
+                    List<int> hours = new List<int>();
+
+                    foreach (Plaatje p in Variables.plaatjeList)
+                    {
+                        //fill the 3 lists with the time the screenshot got taken
+                        //when a image is saved to the clipboard a new Plaatje will be made and added to the plaatjeList with the image, the second,the minute, and the hour
+                        //this foreach loops loops through those Plaatjes
+                        seconds.Add(p.second);
+                        minutes.Add(p.minute);
+                        hours.Add(p.hour);
+                    }
+
+                    int count = 0;
+                    foreach (Image img in Variables.clipboardImageList)
+                    {
+                        if (!System.IO.File.Exists(Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"))
+                        {
+                            img.Save((Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"));
+                            length++;
+                        }
+                        else
+                        {//This shouldn't happen, but oh well.                        
+                            length++;
+                            if (!System.IO.File.Exists(Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"))
+                                img.Save((Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"));
+                        }
+
+                        count++;
+
+                    }
+                    count = 0;
+                }
+            }
         }
 
         public void createFolder()
@@ -632,7 +717,15 @@ namespace ClipboardWatcher
 
 
             pictureBox1.BackgroundImage = null;
-            pictureBox1.Size = new Size(994, 614);
+            switch (Variables.resolution)
+            {
+                case "1000,600": pictureBox1.Size = new Size(619, 414);
+                    break;
+                case "1280,720": pictureBox1.Size = new Size(960, 478);
+                    break;
+                case "1305,805": pictureBox1.Size = new Size(994, 614);
+                    break;
+            }            
 
             if (lvImages.SelectedIndices.Count > 0)
             {
@@ -762,8 +855,7 @@ namespace ClipboardWatcher
 
             panel1.Location = new Point(1312, 12);
             panel2.Location = new Point(2603, 12);
-            pnlfiles.Location = new Point(12, 12);
-          
+            pnlfiles.Location = new Point(12, 12);            
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -845,6 +937,16 @@ namespace ClipboardWatcher
             lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
             lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
             lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
+        }
+
+
+        private void Form1_KeyUp_1(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape && !Variables.resolutionFormUp)
+            {
+                frmResolution = new Resolution(this);
+                frmResolution.Show();
+            }
         }
 
 

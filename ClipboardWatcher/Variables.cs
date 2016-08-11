@@ -55,6 +55,9 @@ namespace ClipboardWatcher
         public static long totalImagesSize;
         public static long savedImagesSize;
 
+        public static string resolution = "1305, 805";
+        public static bool resolutionFormUp;        
+
         
 
         public static string fileSavePath
