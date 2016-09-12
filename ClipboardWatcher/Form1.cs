@@ -497,10 +497,6 @@ namespace ClipboardWatcher
             }
 
 
-
-
-
-
             if (e.CloseReason != CloseReason.WindowsShutDown && e.CloseReason != CloseReason.TaskManagerClosing)
             {
                 if (Variables.clipboardImageList.Count > 0 && Variables.saveImages)
@@ -512,8 +508,9 @@ namespace ClipboardWatcher
             else
             {
                 //Saving images without progressbar (Form2)
-                if (Variables.saveImages)
+                if (Variables.saveImages && lvImages.Items.Count > 0)
                 {
+
                     //there already exists a text file called copies text.txt , hmm.. gotta rename it then! 
                     string[] filez = Directory.GetFiles(Variables.finalImagePath);//Get all the files in the text folder
                     int length = (filez.Length) + 1;//amount of files in the text folder
@@ -544,13 +541,14 @@ namespace ClipboardWatcher
                         {//This shouldn't happen, but oh well.                        
                             length++;
                             if (!System.IO.File.Exists(Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"))
-                                img.Save((Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ").png"));
+                                img.Save((Variables.finalImagePath + "\\" + length + " (" + bLayerFile.FixHours(hours[count]) + "-" + bLayerFile.FixMinutes(minutes[count]) + "-" + bLayerFile.FixSeconds(seconds[count]) + ") .png"));
                         }
 
                         count++;
 
                     }
                     count = 0;
+
                 }
             }
         }

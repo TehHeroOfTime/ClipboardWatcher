@@ -25,8 +25,7 @@ namespace ClipboardWatcher
             ChangeResolution("1305,805");
         }
         public void ChangeResolution(string resolution)
-        {
-            
+        {        
             mainForm.pictureBox1.Image = null;
             if (resolution == "1305,805") //original
             {
