@@ -6,3 +6,5 @@ ClipboardWatcher will display all copied images,text, and names of files in its 
 I have created this application purely for myself because i like programming it, and i think it's funny to look back on what images,files or text i copied a long time ago.
 
 (V2.6.0) Change the resolution of ClipboardWatcher by pressing Esc!
+
+(V2.6.2) Pause ClipboardWatcher by right-clicking the icon in your system tray! 
