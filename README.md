@@ -7,4 +7,4 @@ I have created this application purely for myself because i like programming it,
 
 (V2.6.0) Change the resolution of ClipboardWatcher by pressing Esc!
 
-(V2.6.2) Pause ClipboardWatcher by right-clicking the icon in your system tray!
+(V2.6.2) Pause ClipboardWatcher by right-clicking the icon in your system tray! 
