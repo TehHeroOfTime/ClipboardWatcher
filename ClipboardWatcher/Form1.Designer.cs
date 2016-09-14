@@ -48,7 +48,7 @@
             this.ClipboardIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.cpwSettings = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmrHide = new System.Windows.Forms.Timer(this.components);
+            this.pauseClipboardWatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cbText = new System.Windows.Forms.CheckBox();
             this.cbImages = new System.Windows.Forms.CheckBox();
             this.tbPathText = new System.Windows.Forms.TextBox();
@@ -62,19 +62,20 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label4 = new System.Windows.Forms.Label();
             this.cbStartup = new System.Windows.Forms.CheckBox();
+            this.tbPathFileNames = new System.Windows.Forms.TextBox();
+            this.cbFiles = new System.Windows.Forms.CheckBox();
+            this.lblDelRecord = new System.Windows.Forms.Label();
+            this.toolTipUnique = new System.Windows.Forms.ToolTip(this.components);
+            this.button6 = new System.Windows.Forms.Button();
             this.btnFiles = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.btnText = new System.Windows.Forms.Button();
             this.btnImages = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.tbPathFileNames = new System.Windows.Forms.TextBox();
-            this.cbFiles = new System.Windows.Forms.CheckBox();
-            this.lblDelRecord = new System.Windows.Forms.Label();
-            this.toolTipUnique = new System.Windows.Forms.ToolTip(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             this.lblFilecopies = new System.Windows.Forms.Label();
+            this.lblPause = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.pnlImage.SuspendLayout();
@@ -121,6 +122,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblPause);
             this.panel1.Controls.Add(this.listView1);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 12);
@@ -243,9 +245,10 @@
             // cpwSettings
             // 
             this.cpwSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.pauseClipboardWatcherToolStripMenuItem});
             this.cpwSettings.Name = "cpwSettings";
-            this.cpwSettings.Size = new System.Drawing.Size(93, 26);
+            this.cpwSettings.Size = new System.Drawing.Size(205, 48);
             this.cpwSettings.Text = "Exit";
             // 
             // exitToolStripMenuItem
@@ -253,15 +256,18 @@
             this.exitToolStripMenuItem.Image = global::ClipboardWatcher.Properties.Resources.bin;
             this.exitToolStripMenuItem.MergeIndex = 0;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.exitToolStripMenuItem.Text = "Exit ClipboardWatcher";
             this.exitToolStripMenuItem.ToolTipText = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // tmrHide
+            // pauseClipboardWatcherToolStripMenuItem
             // 
-            this.tmrHide.Interval = 2000;
-            this.tmrHide.Tick += new System.EventHandler(this.tmrHide_Tick);
+            this.pauseClipboardWatcherToolStripMenuItem.Image = global::ClipboardWatcher.Properties.Resources.icon_pause_128;
+            this.pauseClipboardWatcherToolStripMenuItem.Name = "pauseClipboardWatcherToolStripMenuItem";
+            this.pauseClipboardWatcherToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.pauseClipboardWatcherToolStripMenuItem.Text = "Pause ClipboardWatcher";
+            this.pauseClipboardWatcherToolStripMenuItem.Click += new System.EventHandler(this.pauseClipboardWatcherToolStripMenuItem_Click);
             // 
             // cbText
             // 
@@ -309,7 +315,7 @@
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(69, 13);
             this.lblVersion.TabIndex = 21;
-            this.lblVersion.Text = "Version 2.6.1";
+            this.lblVersion.Text = "Version 2.6.2";
             // 
             // button5
             // 
@@ -391,6 +397,46 @@
             this.cbStartup.UseVisualStyleBackColor = true;
             this.cbStartup.CheckedChanged += new System.EventHandler(this.cbStartup_CheckedChanged);
             // 
+            // tbPathFileNames
+            // 
+            this.tbPathFileNames.Enabled = false;
+            this.tbPathFileNames.Location = new System.Drawing.Point(583, 740);
+            this.tbPathFileNames.Name = "tbPathFileNames";
+            this.tbPathFileNames.Size = new System.Drawing.Size(384, 20);
+            this.tbPathFileNames.TabIndex = 27;
+            // 
+            // cbFiles
+            // 
+            this.cbFiles.AutoSize = true;
+            this.cbFiles.Location = new System.Drawing.Point(399, 742);
+            this.cbFiles.Name = "cbFiles";
+            this.cbFiles.Size = new System.Drawing.Size(180, 17);
+            this.cbFiles.TabIndex = 26;
+            this.cbFiles.Text = "Save all copied filenames on exit";
+            this.cbFiles.UseVisualStyleBackColor = true;
+            this.cbFiles.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // lblDelRecord
+            // 
+            this.lblDelRecord.AutoSize = true;
+            this.lblDelRecord.Location = new System.Drawing.Point(12, 670);
+            this.lblDelRecord.Name = "lblDelRecord";
+            this.lblDelRecord.Size = new System.Drawing.Size(146, 13);
+            this.lblDelRecord.TabIndex = 29;
+            this.lblDelRecord.Text = "Press DEL to delete a record!";
+            // 
+            // button6
+            // 
+            this.button6.BackgroundImage = global::ClipboardWatcher.Properties.Resources.folder;
+            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button6.Location = new System.Drawing.Point(973, 738);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(33, 20);
+            this.button6.TabIndex = 28;
+            this.toolTipUnique.SetToolTip(this.button6, "Set a path");
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // btnFiles
             // 
             this.btnFiles.BackgroundImage = global::ClipboardWatcher.Properties.Resources.fie;
@@ -403,18 +449,6 @@
             this.toolTipUnique.SetToolTip(this.btnFiles, "Files");
             this.btnFiles.UseVisualStyleBackColor = true;
             this.btnFiles.Click += new System.EventHandler(this.btnFiles_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackgroundImage = global::ClipboardWatcher.Properties.Resources.save;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(12, 695);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(81, 64);
-            this.button1.TabIndex = 2;
-            this.toolTipUnique.SetToolTip(this.button1, "Saves the list of text,file names or images");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button4
             // 
@@ -478,45 +512,17 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button6
+            // button1
             // 
-            this.button6.BackgroundImage = global::ClipboardWatcher.Properties.Resources.folder;
-            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button6.Location = new System.Drawing.Point(973, 738);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(33, 20);
-            this.button6.TabIndex = 28;
-            this.toolTipUnique.SetToolTip(this.button6, "Set a path");
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // tbPathFileNames
-            // 
-            this.tbPathFileNames.Enabled = false;
-            this.tbPathFileNames.Location = new System.Drawing.Point(583, 740);
-            this.tbPathFileNames.Name = "tbPathFileNames";
-            this.tbPathFileNames.Size = new System.Drawing.Size(384, 20);
-            this.tbPathFileNames.TabIndex = 27;
-            // 
-            // cbFiles
-            // 
-            this.cbFiles.AutoSize = true;
-            this.cbFiles.Location = new System.Drawing.Point(399, 742);
-            this.cbFiles.Name = "cbFiles";
-            this.cbFiles.Size = new System.Drawing.Size(180, 17);
-            this.cbFiles.TabIndex = 26;
-            this.cbFiles.Text = "Save all copied filenames on exit";
-            this.cbFiles.UseVisualStyleBackColor = true;
-            this.cbFiles.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // lblDelRecord
-            // 
-            this.lblDelRecord.AutoSize = true;
-            this.lblDelRecord.Location = new System.Drawing.Point(12, 670);
-            this.lblDelRecord.Name = "lblDelRecord";
-            this.lblDelRecord.Size = new System.Drawing.Size(146, 13);
-            this.lblDelRecord.TabIndex = 29;
-            this.lblDelRecord.Text = "Press DEL to delete a record!";
+            this.button1.BackgroundImage = global::ClipboardWatcher.Properties.Resources.save;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(12, 695);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(81, 64);
+            this.button1.TabIndex = 2;
+            this.toolTipUnique.SetToolTip(this.button1, "Saves the list of text,file names or images");
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // lblFilecopies
             // 
@@ -526,6 +532,18 @@
             this.lblFilecopies.Size = new System.Drawing.Size(87, 13);
             this.lblFilecopies.TabIndex = 30;
             this.lblFilecopies.Text = "Total file copies: ";
+            // 
+            // lblPause
+            // 
+            this.lblPause.AutoSize = true;
+            this.lblPause.Font = new System.Drawing.Font("Sitka Text", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPause.ForeColor = System.Drawing.Color.Red;
+            this.lblPause.Location = new System.Drawing.Point(633, -5);
+            this.lblPause.Name = "lblPause";
+            this.lblPause.Size = new System.Drawing.Size(94, 29);
+            this.lblPause.TabIndex = 2;
+            this.lblPause.Text = "PAUSED";
+            this.lblPause.Visible = false;
             // 
             // Form1
             // 
@@ -600,7 +618,6 @@
         public System.Windows.Forms.Label lblOverallcopies;
         public System.Windows.Forms.Panel pnlImage;
         public System.Windows.Forms.NotifyIcon ClipboardIcon;
-        public System.Windows.Forms.Timer tmrHide;
         public System.Windows.Forms.CheckBox cbText;
         public System.Windows.Forms.CheckBox cbImages;
         public System.Windows.Forms.TextBox tbPathText;
@@ -626,6 +643,8 @@
         public System.Windows.Forms.CheckBox cbUnique;
         public System.Windows.Forms.ToolTip toolTipUnique;
         public System.Windows.Forms.Label lblFilecopies;
+        private System.Windows.Forms.ToolStripMenuItem pauseClipboardWatcherToolStripMenuItem;
+        public System.Windows.Forms.Label lblPause;
     }
 }
 

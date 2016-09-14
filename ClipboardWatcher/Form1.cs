@@ -37,6 +37,11 @@ namespace ClipboardWatcher
        
         private void Form1_Load(object sender, EventArgs e)
         {
+            BeginInvoke(new MethodInvoker(delegate
+            {
+                Hide();
+            }));
+
             this.KeyPreview = true;
             lblDelRecord.Visible = false;
             Variables.resolutionFormUp = false;
@@ -102,8 +107,7 @@ namespace ClipboardWatcher
 
             
             this.WindowState = FormWindowState.Minimized;
-
-            tmrHide.Start();
+            
             this.Hide();    
 
 
@@ -166,74 +170,87 @@ namespace ClipboardWatcher
         int tt = 0;
         protected override void WndProc(ref Message m)
         {
-            tt++;
-
-            string date = DateTime.Now.ToLongDateString();
-            string Time = DateTime.Now.ToLongTimeString();
-            string completedate = date + " " + Time;
-            base.WndProc(ref m);    // Process the message 
-
-            if (m.Msg == WM_DRAWCLIPBOARD)
+            if (!Variables.pause)
             {
-                
+                tt++;
 
-                try
+                string date = DateTime.Now.ToLongDateString();
+                string Time = DateTime.Now.ToLongTimeString();
+                string completedate = date + " " + Time;
+                base.WndProc(ref m);    // Process the message 
+
+                if (m.Msg == WM_DRAWCLIPBOARD)
                 {
-                    IDataObject iData = Clipboard.GetDataObject();      // Clipboard's data
 
-                    if (iData.GetDataPresent(DataFormats.Text))
+
+                    try
                     {
-                        string text = (string)iData.GetData(DataFormats.Text);      // Clipboard text
+                        IDataObject iData = Clipboard.GetDataObject();      // Clipboard's data
 
-                        if (text.Contains("http")) 
-                            linkText++; 
-
-                        if (linkText <= 1)
+                        if (iData.GetDataPresent(DataFormats.Text))
                         {
-                            ListViewItem itm = new ListViewItem();
-                            itm.Text = text;
-                            if (allowCopy)
+                            string text = (string)iData.GetData(DataFormats.Text);      // Clipboard text
+
+                            if (text.Contains("http"))
+                                linkText++;
+
+                            if (linkText <= 1)
                             {
-                                itm.SubItems.Add(completedate);
-                                listView1.Items.Add(itm);
-                                Variables.clipboardTextList.Add("[" + completedate + "]" + text);
-                            }
-                            else
-                                allowCopy = true;
-                        }
-
-
-                        // do something with it
-                    }
-                    else if (iData.GetDataPresent(DataFormats.Bitmap))
-                    {                        
-                        Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image 
-                        Plaatje plaatje = new Plaatje(image,DateTime.Now.Hour,DateTime.Now.Minute,DateTime.Now.Second);
-                        Variables.plaatjeList.Add(plaatje);
-                        Variables.clipboardImageList.Add(image);
-                        Variables.clipboardImageDate.Add(completedate);
-
-                        lvImages.Items.Clear();
-                        foreach (string t in Variables.clipboardImageDate)
-                        {
-                            lvImages.Items.Add(t);
-                        }
-
-                        // do something with it
-                    }
-                    else if (iData.GetDataPresent(DataFormats.FileDrop))
-                    {
-                        string[] copiedFile = (string[])iData.GetData(DataFormats.FileDrop);
-                        foreach (string t in copiedFile)
-                        {                            
-                            if (Variables.enableUniqueFiles)
-                            {
-                                int length = Variables.copiedFileNames.Count;
-                                if (length > 0 && Variables.copiedFileNames.Contains(t))
+                                ListViewItem itm = new ListViewItem();
+                                itm.Text = text;
+                                if (allowCopy)
                                 {
-
+                                    itm.SubItems.Add(completedate);
+                                    listView1.Items.Add(itm);
+                                    Variables.clipboardTextList.Add("[" + completedate + "]" + text);
                                 }
                                 else
+                                    allowCopy = true;
+                            }
+
+
+                            // do something with it
+                        }
+                        else if (iData.GetDataPresent(DataFormats.Bitmap))
+                        {
+                            Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image 
+                            Plaatje plaatje = new Plaatje(image, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                            Variables.plaatjeList.Add(plaatje);
+                            Variables.clipboardImageList.Add(image);
+                            Variables.clipboardImageDate.Add(completedate);
+
+                            lvImages.Items.Clear();
+                            foreach (string t in Variables.clipboardImageDate)
+                            {
+                                lvImages.Items.Add(t);
+                            }
+
+                            // do something with it
+                        }
+                        else if (iData.GetDataPresent(DataFormats.FileDrop))
+                        {
+                            string[] copiedFile = (string[])iData.GetData(DataFormats.FileDrop);
+                            foreach (string t in copiedFile)
+                            {
+                                if (Variables.enableUniqueFiles)
+                                {
+                                    int length = Variables.copiedFileNames.Count;
+                                    if (length > 0 && Variables.copiedFileNames.Contains(t))
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        Variables.copiedFileNames.Add(t);
+
+                                        ListViewItem itm = new ListViewItem();
+                                        itm.Text = t;
+                                        itm.SubItems.Add(completedate);
+                                        lvFiles.Items.Add(itm);
+                                        Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
+                                    }
+                                }
+                                else//not unique
                                 {
                                     Variables.copiedFileNames.Add(t);
 
@@ -243,38 +260,28 @@ namespace ClipboardWatcher
                                     lvFiles.Items.Add(itm);
                                     Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
                                 }
-                            }
-                            else//not unique
-                            {
-                                Variables.copiedFileNames.Add(t);
 
-                                ListViewItem itm = new ListViewItem();
-                                itm.Text = t;
-                                itm.SubItems.Add(completedate);
-                                lvFiles.Items.Add(itm);
-                                Variables.clipboardFileNameList.Add("[" + completedate + "]" + t);
                             }
-                            
+
+
+
                         }
 
-                      
+
+
+                        lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
+                        lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
+                        lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
+                        lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count);
+
+                        if (linkText >= 2)
+                            linkText = 0;
 
                     }
+                    catch (System.Runtime.InteropServices.ExternalException ex) { }
+                    catch (Exception ex) { }
 
-
-
-                    lblImageCopies.Text = "Total image copies: " + Variables.clipboardImageList.Count;
-                    lblTextcopies.Text = "Total text copies: " + Variables.clipboardTextList.Count;
-                    lblFilecopies.Text = "Total file copies: " + (Variables.copiedFileNames.Count);
-                    lblOverallcopies.Text = "Total overall copies: " + (Variables.clipboardImageList.Count + Variables.clipboardTextList.Count + Variables.copiedFileNames.Count); 
-
-                    if (linkText >= 2)
-                        linkText = 0;
-                    
                 }
-                catch (System.Runtime.InteropServices.ExternalException ex) { }
-                catch (Exception ex) { }
-                
             }
         }
 
@@ -630,12 +637,7 @@ namespace ClipboardWatcher
             
         }
 
-        private void tmrHide_Tick(object sender, EventArgs e)
-        {
-            this.ShowInTaskbar = true;
-            this.Hide();
-            tmrHide.Stop();
-        }
+
 
         private void cbText_CheckedChanged(object sender, EventArgs e)
         {
@@ -944,6 +946,24 @@ namespace ClipboardWatcher
             {
                 frmResolution = new Resolution(this);
                 frmResolution.Show();
+            }
+        }
+
+        private void pauseClipboardWatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Variables.pause)
+            {
+                Variables.pause = false;
+                pauseClipboardWatcherToolStripMenuItem.Text = "Pause RemindMe";
+                pauseClipboardWatcherToolStripMenuItem.Image = Properties.Resources.icon_pause_128;
+                lblPause.Visible = false;
+            }
+            else
+            {
+                Variables.pause = true;
+                lblPause.Visible = true;
+                pauseClipboardWatcherToolStripMenuItem.Text = "Resume RemindMe";
+                pauseClipboardWatcherToolStripMenuItem.Image = Properties.Resources.resume;
             }
         }
 

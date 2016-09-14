@@ -98,21 +98,6 @@ namespace ClipboardWatcher
                 }
             }
         }
-        public void SaveImages() //TODO: Get size of current image :/
-        {
-
-            //Save the files if the user selected to do so
-            if (Variables.saveImages)
-            {
-                //there already exists a text file called copies text.txt , hmm.. gotta rename it then! 
-
-                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved [" + Variables.totalImagesSize + "]";
-                lblProcent.Text = CalculatePercentage(count) + "%"; 
-                count = 0;
-            }
-           
-        }
-
 
         public double CalculatePercentage(int imageCount)
         {
@@ -191,11 +176,11 @@ namespace ClipboardWatcher
                 if (count > hours.Count)
                     count = hours.Count -1;
 
-                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved";                                                
+                                                             
                 lblProcent.Text = (int)Math.Ceiling(procent) +"%";
                 value = value + CalculatePercentage(count);
                 progressBar1.Value = (int)Math.Ceiling(procent);
-
+                lblImages.Text = count + "/" + Variables.clipboardImageList.Count + " Images saved";   
 
                 
                 
