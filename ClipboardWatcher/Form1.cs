@@ -954,7 +954,7 @@ namespace ClipboardWatcher
             if (Variables.pause)
             {
                 Variables.pause = false;
-                pauseClipboardWatcherToolStripMenuItem.Text = "Pause RemindMe";
+                pauseClipboardWatcherToolStripMenuItem.Text = "Pause ClipboardWatcher";
                 pauseClipboardWatcherToolStripMenuItem.Image = Properties.Resources.icon_pause_128;
                 lblPause.Visible = false;
             }
@@ -962,7 +962,7 @@ namespace ClipboardWatcher
             {
                 Variables.pause = true;
                 lblPause.Visible = true;
-                pauseClipboardWatcherToolStripMenuItem.Text = "Resume RemindMe";
+                pauseClipboardWatcherToolStripMenuItem.Text = "Resume ClipboardWatcher";
                 pauseClipboardWatcherToolStripMenuItem.Image = Properties.Resources.resume;
             }
         }
